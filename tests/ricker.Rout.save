@@ -1,0 +1,72 @@
+
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(pomp)
+> 
+> set.seed(1800076828)
+> 
+> png(filename="ricker-%02d.png",res=100)
+> 
+> ricker() -> po
+> plot(po)
+> 
+> stopifnot(
++   all.equal(
++     coef(po),
++     partrans(po,coef(po,transform=TRUE),dir="from")
++   ),
++   all.equal(
++     coef(po,transform=TRUE),
++     partrans(po,coef(po),dir="to")
++   )
++ )
+> 
+> pfilter(
++   po,
++   Np=1000,
++   filter.mean=TRUE,
++   pred.mean=TRUE,
++   pred.var=TRUE,
++   filter.traj=TRUE,
++   save.states="filter"
++ ) -> pf
+> 
+> stopifnot(
++   abs(logLik(pf)+138.5)<0.05
++ )
+> 
+> plot(pf,yax.flip=TRUE)
+> 
+> forecast(pf,format="d") -> fc
+> simulate(pf) -> sm
+> 
+> emeasure(sm) -> ef
+> vmeasure(sm) -> vf
+> plot(ef,vf)
+> 
+> plot(time(sm),obs(sm),xlab="time",ylab="Y")
+> lines(time(sm),ef)
+> 
+> trajectory(po) -> tj
+> plot(tj)
+> 
+> dev.off()
+null device 
+          1 
+> 

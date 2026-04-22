@@ -1,0 +1,62 @@
+
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> options(digits=3)
+> 
+> library(pomp)
+> 
+> set.seed(240311270)
+> 
+> ripple <- function (x) {
++   r <- sqrt(sum(x^2))
++   1-exp(-r^2)*cos(10*r)^2
++ }
+> 
+> sannbox(par=c(1),fn=ripple,control=list(lower=1,upper=5)) -> out1
+> sannbox(par=c(1),fn=ripple,control=list(lower=NULL,upper=NULL)) -> out2
+> stopifnot(out1$convergence==0, out2$convergence==0)
+> try(sannbox(par=c(1),fn=ripple,control=list(
++   lower=NULL,upper=NULL,
++   sched=seq(10,1,length=10))))
+Error : in 'sannbox': insufficiently many temperatures supplied in 'control$sched'
+> sannbox(par=c(1),fn=ripple,control=list(
++   lower=1,upper=5,maxit=100,sched=seq(10,1,length=100))) -> out3
+> stopifnot(out3$convergence == 0)
+> capture.output(
++   sannbox(par=c(1),fn=ripple,control=list(lower=1,upper=5,maxit=10,trace=4)) -> out5
++ ) -> tout
+> stopifnot(
++   sum(grepl("current params",tout))==10,
++   sum(grepl("proposed params",tout))==10,
++   sum(grepl("accept",tout))==10,
++   sum(grepl("best",tout))==1
++ )
+> 
+> f <- function (x) {
++   if (sqrt(sum(x^2))<1) ripple(x)
++   else Inf
++ }
+> invisible(sannbox(par=c(2,2),fn=f))
+> 
+> try(sannbox(par=c(2,2),fn=f,control=list(candidate.dist="bob")))
+Error : in 'sannbox': 'control$candidate.dist' must be a function.
+> try(sannbox(par=c(2,2),fn=f,control=list(
++   candidate.dist=function(x)x)))
+Error : in 'sannbox': 'candidate.dist' must be a function of the form 'candidate.dist(par, temp, scale, ...)'.
+> 

@@ -1,0 +1,283 @@
+
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(pomp)
+> 
+> gompertz() -> po
+> 
+> set.seed(530370883)
+> 
+> coef(po)
+    K     r sigma   tau   X_0 
+  1.0   0.1   0.1   0.1   1.0 
+> coef(po,transform=TRUE)
+        K         r     sigma       tau       X_0 
+ 0.000000 -2.302585 -2.302585 -2.302585  0.000000 
+> coef(po,c("r","tau"))
+  r tau 
+0.1 0.1 
+> try(coef(po,c("bob","tau")))
+Error : in 'coef': name 'bob' corresponds to no parameter.
+> try(coef(po) <- c(1,2,3))
+Error : in 'coef<-': 'value' must be a named vector.
+> try(coef(po,transform=TRUE) <- c(1,2,3))
+Error : in 'partrans': variable 'r' not found among the parameters.
+> coef(po) <- list(as.list(coef(po)))
+> coef(po,"r") <- 0.2
+> coef(po,"r") <- list(r=0.2)
+Warning message:
+in 'coef<-': names of 'value' are being discarded. 
+> coef(po,c("r","theta")) <- list(r=0.2)
+Warning messages:
+1: in 'coef<-': names of 'value' are being discarded. 
+2: in 'coef<-': name 'theta' refers to no existing parameter; it is being concatenated. 
+> coef(po,"sigma",transform=TRUE) <- 0
+> coef(po)
+    K     r sigma   tau   X_0 theta 
+  1.0   0.2   1.0   0.1   1.0   0.2 
+> coef(po) <- NULL
+> stopifnot(identical(coef(po),numeric(0)))
+> coef(po,c("r","sigma")) <- 1
+> stopifnot(all.equal(coef(po),c(r=1,sigma=1)))
+> coef(po) <- NULL
+> try(coef(po,c("r","sigma"),transform=TRUE) <- 0)
+Error : in 'partrans': variable 'K' not found among the parameters.
+> coef(po) <- NULL
+> coef(po) <- c(r=1,sigma=1)
+> stopifnot(all.equal(coef(po),c(r=1,sigma=1)))
+> coef(po) <- NULL
+> coef(po,transform=TRUE) <- c(r=0,sigma=0,K=0,tau=0,X_0=0)
+> stopifnot(all.equal(coef(po),c(r=1,sigma=1,K=1,tau=1,X_0=1)))
+> 
+> ou2() -> po
+> po1 <- simulate(po)
+> 
+> as(po,"data.frame") |> head()
+  time        y1        y2         x1        x2
+1    1 -4.051293 4.7806442 -3.7184616  4.249533
+2    2  1.834630 6.2733019  0.9403927  6.843546
+3    3 -1.317003 7.5558688 -0.3725648  7.592267
+4    4  6.640487 5.7299615  5.8085324  6.490249
+5    5  6.575312 1.5614843  5.6054356  1.835443
+6    6  7.540323 0.1756402  7.3546052 -1.566206
+> as.data.frame(po1) |> head()
+  time          y1       y2         x1       x2
+1    1  1.83110320 3.210702  3.0483049 3.974364
+2    2 -0.04753752 5.523446  0.4419551 4.171528
+3    3 -4.98247221 1.617596 -2.5276922 1.783185
+4    4 -3.58397785 4.565235 -2.4003663 3.022412
+5    5  2.39608380 5.300931  1.6061913 5.384364
+6    6 -1.60007417 3.159562 -0.2400938 3.300455
+> 
+> obs(po)[,1:3]
+    time
+name      [,1]     [,2]      [,3]
+  y1 -4.051293 1.834630 -1.317003
+  y2  4.780644 6.273302  7.555869
+> obs(po,"y2")[,1:3]
+[1] 4.780644 6.273302 7.555869
+> try(obs(po,c("y2","z")))
+Error : in 'obs': some elements of 'vars' correspond to no observed variable.
+> 
+> states(po)
+    time
+name      [,1]      [,2]       [,3]     [,4]     [,5]      [,6]      [,7]
+  x1 -3.718462 0.9403927 -0.3725648 5.808532 5.605436  7.354605  6.027326
+  x2  4.249533 6.8435458  7.5922673 6.490249 1.835443 -1.566206 -5.769165
+    time
+name      [,8]      [,9]       [,10]     [,11]     [,12]     [,13]     [,14]
+  x1  2.591861  1.564051   0.9793928 -3.769735 -4.465833 -2.609638 -1.571468
+  x2 -8.204354 -8.129966 -10.4613626 -8.241354 -8.319737 -8.341361 -7.866703
+    time
+name     [,15]     [,16]     [,17]       [,18]     [,19]     [,20]     [,21]
+  x1 -1.676192 -6.459881 -9.677313 -12.1463456 -7.161080 -6.548949 -2.168746
+  x2 -8.955705 -6.614633 -2.263629   0.7498668  7.646225 14.144493 17.074303
+    time
+name     [,22]    [,23]     [,24]     [,25]     [,26]     [,27]      [,28]
+  x1  5.819274  9.54269 11.771201 11.118814 10.557558  2.672949  0.1864453
+  x2 19.905790 18.22261  9.578661  4.180379 -3.285832 -5.987268 -7.8591845
+    time
+name     [,29]     [,30]     [,31]     [,32]     [,33]      [,34]      [,35]
+  x1 -2.824932 -4.556638 -6.423103 -7.833862 -3.650647 -2.7021807 -4.1179304
+  x2 -8.408981 -7.208283 -8.994633 -4.552298 -1.658030  0.5031595 -0.3472324
+    time
+name     [,36]     [,37]     [,38]     [,39]    [,40]     [,41]       [,42]
+  x1 -3.548005 -2.252424 0.7992541 0.2633074 2.014700 0.2839356 -0.24930759
+  x2  1.613964  1.965179 2.2202156 5.0421617 0.823271 0.7792341 -0.05037456
+    time
+name     [,43]     [,44]    [,45]    [,46]    [,47]    [,48]    [,49]     [,50]
+  x1 -3.047634 -2.295912 2.175010 4.161905 4.338019 2.102369 1.878480 0.9165691
+  x2  4.293642  7.854921 9.350568 8.817059 7.507315 5.879635 2.446674 4.1226197
+    time
+name      [,51]     [,52]     [,53]      [,54]      [,55]      [,56]      [,57]
+  x1 3.95790848  2.815407  1.146323  0.8955099 -0.6876014  0.7267551 -0.1082068
+  x2 0.02479867 -3.399517 -7.570888 -5.0939677 -3.0098935 -4.0507391 -6.0031982
+    time
+name      [,58]     [,59]     [,60]     [,61]     [,62]      [,63]    [,64]
+  x1  0.2069616 -8.333998 -9.503259 -6.708169 -5.185757 -0.4473262 6.091655
+  x2 -6.3700829 -6.325354 -1.396653  1.226086  4.604219  7.0241444 1.939488
+    time
+name       [,65]     [,66]     [,67]     [,68]      [,69]     [,70]     [,71]
+  x1  7.38875983  7.033866  4.613739  2.480244 -0.1542312 -1.505933 -5.338838
+  x2 -0.01318833 -1.428150 -5.515425 -6.767179 -4.3387467 -5.995982 -5.549160
+    time
+name      [,72]     [,73]     [,74]     [,75]     [,76]    [,77]     [,78]
+  x1 -10.109899 -5.693187 -5.309844 -10.28625  2.228661 9.618410 9.3340634
+  x2  -1.713551  1.398188  5.629586  10.19314 11.181627 8.083588 0.2761495
+    time
+name     [,79]     [,80]     [,81]     [,82]      [,83]      [,84]     [,85]
+  x1  3.318304  5.927537  4.686989  1.824861 -0.4577823 -3.3841796 -4.883498
+  x2 -3.158758 -2.998267 -3.616432 -2.695511 -1.9417755  0.4407706  4.278637
+    time
+name     [,86]     [,87]     [,88]     [,89]     [,90]     [,91]    [,92]
+  x1 -4.324573 -8.957549 -5.523806 -2.901289  5.836531  9.610322 12.89082
+  x2  5.643270 10.894346 14.748086 16.443004 20.429526 18.607595 12.76983
+    time
+name     [,93]     [,94]      [,95]       [,96]      [,97]     [,98]     [,99]
+  x1 13.789569  9.124335   9.574495  -0.7486587  -2.105521 -7.631643 -3.725199
+  x2  3.645828 -4.273479 -11.626880 -11.5756615 -13.330174 -8.523203 -2.712183
+    time
+name     [,100]
+  x1 -3.8740390
+  x2 -0.1375925
+> states(po1,"x1")[,1:3]
+[1]  3.0483049  0.4419551 -2.5276922
+> try(states(po1,"z"))
+Error : in 'states': some elements of 'vars' correspond to no state variable
+> states(po1)[,1:3]
+    time
+name     [,1]      [,2]      [,3]
+  x1 3.048305 0.4419551 -2.527692
+  x2 3.974364 4.1715284  1.783185
+> states(ricker())[,1:3]
+      time
+name   [,1] [,2] [,3]
+> 
+> time(po)[1:3]
+[1] 1 2 3
+> time(po,t0=TRUE)[1:3]
+[1] 0 1 2
+> 
+> time(po) <- 1:10
+> try(time(po) <- c("bob","nancy"))
+Error : in 'time<-':  times must be numeric and finite.
+> time(po1,t0=TRUE) <- 0:10
+> try(time(po) <- 10:0)
+Error : in 'time<-': times must be a non-decreasing numeric sequence.
+> try(time(po,t0=TRUE) <- c(4,1:10))
+Error : in 'time<-': the zero-time 't0' must occur no later than the first observation.
+> time(po1) <- c(1:5,5,5:10)
+> stopifnot(obs(po1)[,6:7]==obs(po1)[,5],
++   states(po1)[,6:7]==states(po1)[,5])
+> 
+> window(po,end=5)
+<object of class 'pomp'>
+> window(po,start=5)
+<object of class 'pomp'>
+> window(po,start=5,end=10)
+<object of class 'pomp'>
+> try(window(po,start=5,end=3))
+Error : in 'window': 'start' must not be later than 'end'.
+> try(window(po,start=NA,end=3))
+Error : in 'window': 'start' and 'end' must be finite times.
+> try(window(po,start=1,end=NULL))
+Error : in 'window': 'start' and 'end' must be finite times.
+> 
+> timezero(po)
+[1] 0
+> timezero(po) <- -3
+> try(timezero(po) <- NA)
+Error : in 'timezero<-': the zero-time 't0' must be a single finite number.
+> try(timezero(po) <- c(1,2,3))
+Error : in 'timezero<-': the zero-time 't0' must be a single finite number.
+> try(timezero(po) <- 20)
+Error : in 'timezero<-': the zero-time 't0' must occur no later than the first observation.
+> 
+> coef(po)
+alpha_1 alpha_2 alpha_3 alpha_4 sigma_1 sigma_2 sigma_3     tau    x1_0    x2_0 
+    0.8    -0.5     0.3     0.9     3.0    -0.5     2.0     1.0    -3.0     4.0 
+> coef(po,c("alpha_3","tau"))
+alpha_3     tau 
+    0.3     1.0 
+> try(coef(po,c("alpha_3","z")))
+Error : in 'coef': name 'z' corresponds to no parameter.
+> 
+> coef(po,"alpha_3") <- 4
+> coef(po,"z") <- 9
+Warning message:
+in 'coef<-': name 'z' refers to no existing parameter; it is being concatenated. 
+> coef(po)
+alpha_1 alpha_2 alpha_3 alpha_4 sigma_1 sigma_2 sigma_3     tau    x1_0    x2_0 
+    0.8    -0.5     4.0     0.9     3.0    -0.5     2.0     1.0    -3.0     4.0 
+      z 
+    9.0 
+> coef(po) <- NULL
+> coef(po)
+numeric(0)
+> coef(po) <- list(a=3,b=12)
+> 
+> gompertz() -> gompertz
+> gompertz -> po
+> 
+> pos <- c(po,po,po)
+> stopifnot(
++   dim(coef(pos))==c(5,3),
++   length(obs(pos))==3,
++   all(sapply(obs(pos),length)==100),
++   length(states(pos))==3,
++   all(sapply(states(pos),length)==100)
++ )
+> 
+> coef(po)
+    K     r sigma   tau   X_0 
+  1.0   0.1   0.1   0.1   1.0 
+> coef(po,transform=TRUE,pars=c("r","K"))
+        r         K 
+-2.302585  0.000000 
+> coef(po,"sigma",transform=TRUE) <- 0
+> coef(po)
+    K     r sigma   tau   X_0 
+  1.0   0.1   1.0   0.1   1.0 
+> coef(po,c("r","K","sigma","tau","X_0")) <- c(a=1,b=2,c=3,d=4,e=5)
+Warning message:
+in 'coef<-': names of 'value' are being discarded. 
+> coef(po) <- c(r=1,K=1)
+> coef(po) <- NULL
+> try(coef(po,transform=FALSE) <- c(5,3))
+Error : in 'coef<-': 'value' must be a named vector.
+> try(coef(po,transform=TRUE) <- c(5,3))
+Error : in 'partrans': variable 'r' not found among the parameters.
+> coef(po)
+numeric(0)
+> po |>
++   window(start=5,end=20) |>
++   pomp(covar=covariate_table(times=0:20,q=0:20),
++     userdata=list(larry=3L)) -> po1
+> as(po1,"data.frame") |> head()
+  time         Y  q
+1    5 0.7408867  5
+2    6 1.0457807  6
+3    7 1.1067887  7
+4    8 1.0408258  8
+5    9 1.1051387  9
+6   10 1.3038009 10
+> 
+> dim(as.data.frame(c(a=po1,b=po1)))
+[1] 32  4
+> 

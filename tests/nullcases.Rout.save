@@ -1,0 +1,52 @@
+
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(pomp)
+> 
+> simulate(times=1:10,t0=0,
++          statenames="x",
++          obsnames="y",
++          params=c(x_0=0),
++          rprocess=onestep(function(...)c(x=1)),
++          rmeasure=Csnippet("")
++ ) -> s1
+> states(s1)
+    time
+name [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+   x    1    1    1    1    1    1    1    1    1     1
+> obs(s1)
+    time
+name [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+   y   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA
+> 
+> simulate(times=1:10,t0=0,
++          statenames="x",
++          params=c(x_0=0),
++          rprocess=onestep(function(...)c(x=1))
++ ) -> s2
+Warning message:
+'rmeasure' unspecified: NAs generated. 
+> states(s2)
+    time
+name [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+   x    1    1    1    1    1    1    1    1    1     1
+> obs(s2)
+      time
+name   [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+> 

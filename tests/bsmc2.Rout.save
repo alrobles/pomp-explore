@@ -1,0 +1,170 @@
+
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> png(filename="bsmc2-%02d.png",res=100)
+> options(digits=2)
+> 
+> library(pomp)
+> suppressPackageStartupMessages({
++   library(dplyr)
++   library(tidyr)
++   library(ggplot2)
++ })
+> 
+> gompertz() -> gompertz
+> set.seed(398585L)
+> 
+> time(gompertz) <- 1:10
+> 
+> smc <- bsmc2(
++   gompertz,
++   rprior=Csnippet("
++     K = runif(0.1,1);
++     r = rlnorm(log(0.2),1);
++     sigma = rlnorm(log(0.1),0.5);"),
++   paramnames=c("r","K","sigma"),
++   Np=1000,smooth=0.05
++ )
+> 
+> plot(smc,y=NA)
+> plot(smc,pars=c("r","K"),thin=20)
+> try(plot(smc,pars="bob"))
+Error : in 'plot': unrecognized parameters: 'bob'
+> plot(smc,pars="K")
+> try(plot(smc,pars=NULL))
+Error : in 'plot': no parameters to plot.
+> stopifnot(
++   sum(cond_logLik(smc))==logLik(smc),
++   length(eff_sample_size(smc)) == 10
++ )
+> smc |> eff_sample_size(format="d") |> names()
+[1] "time"            "eff.sample.size"
+> smc |> eff_sample_size(format="d") |> sapply(class)
+           time eff.sample.size 
+      "numeric"       "numeric" 
+> smc |> cond_logLik(format="d") |> names()
+[1] "time"              "cond_log.evidence"
+> smc |> cond_logLik(format="d") |> sapply(class)
+             time cond_log.evidence 
+        "numeric"         "numeric" 
+> 
+> try(bsmc2())
+Error : in 'bsmc2': 'data' is a required argument.
+> try(bsmc2(3L))
+Error : 'bsmc2' is undefined for 'data' of class 'integer'.
+> 
+> po <- smc
+> coef(po) <- NULL
+> try(bsmc2(smc))
+Error : in 'bsmc2': 'Np' must be specified.
+> try(bsmc2(po))
+Error : in 'bsmc2': 'Np' must be specified.
+> try(bsmc2(po,params=NULL))
+Error : in 'bsmc2': 'Np' must be specified.
+> try(bsmc2(po,params="yes"))
+Error : in 'bsmc2': 'params' must be a named numeric vector.
+In addition: Warning message:
+NAs introduced by coercion 
+> try(bsmc2(po,params=list()))
+Error : in 'bsmc2': 'Np' must be specified.
+> try(bsmc2(po,params=c(1,2,3)))
+Error : in 'bsmc2': 'params' must be a named numeric vector.
+> theta <- coef(smc)
+> try(bsmc2(po,params=as.list(theta)))
+Error : in 'bsmc2': 'Np' must be specified.
+> try(bsmc2(po,params=as.list(theta),Np=1))
+Error : in 'bsmc2': no parameters to estimate
+> try(bsmc2(smc,Np=-10))
+Error : in 'bsmc2': number of particles, 'Np', must be a positive integer.
+> try(bsmc2(smc,params=theta,Np=100,
++   dmeasure=Csnippet("error(\"whoa nelly!\");")))
+Error : in 'bsmc2': in 'dmeasure': whoa nelly!
+> try(bsmc2(smc,Np=100,smooth=5))
+Error : in 'bsmc2': 'smooth' must be a scalar in (0,1]
+> try(bsmc2(smc,Np=100,smooth=NA))
+Error : in 'bsmc2': 'smooth' must be a scalar in (0,1]
+> try(bsmc2(smc,Np=100,smooth=-2))
+Error : in 'bsmc2': 'smooth' must be a scalar in (0,1]
+> try(bsmc2(smc,Np=100,smooth=NULL))
+Error : in 'bsmc2': 'smooth' must be a scalar in (0,1]
+> try(bsmc2(smc,Np=100,smooth=Inf))
+Error : in 'bsmc2': 'smooth' must be a scalar in (0,1]
+> try(bsmc2(smc,Np=100,smooth="yes"))
+Error : in 'bsmc2': 'smooth' must be a scalar in (0,1]
+> try(bsmc2(smc,Np=100,smooth=c(1,2)))
+Error : in 'bsmc2': 'smooth' must be a scalar in (0,1]
+> try(bsmc2(smc,Np=100,smooth=list(1,2)))
+Error : in 'bsmc2': 'smooth' must be a scalar in (0,1]
+> try(bsmc2(smc,Np=100,rprocess=NULL))
+Error : in 'bsmc2': 'rprior', 'rprocess', 'dmeasure' are needed basic components.
+> try(bsmc2(smc,Np=100,params=NULL))
+Error : in 'bsmc2': in 'rprior': variable 'r' not found among the parameters.
+> try(bsmc2(smc,Np=100,dmeasure=NULL))
+Error : in 'bsmc2': 'rprior', 'rprocess', 'dmeasure' are needed basic components.
+> try(bsmc2(smc,Np=100,rprior=NULL))
+Error : in 'bsmc2': 'rprior', 'rprocess', 'dmeasure' are needed basic components.
+> 
+> theta <- coef(gompertz)
+> theta["K"] <- 1
+> try(capture.output(bsmc2(po,Np=2,params=theta,verbose=TRUE)) -> out)
+> 
+> smc |> as.data.frame() |>
++   filter(.id=="posterior") |>
++   select(-.id) -> pp
+> 
+> gompertz |>
++   as.data.frame() |>
++   subset(select=-X) |>
++   bsmc2(
++     times="time",t0=-5,
++     params=coef(gompertz),
++     Np=1000,smooth=0.1,
++     rprior=Csnippet("
++       K = runif(0.1,1);
++       r = rlnorm(log(0.2),1);
++       sigma = rlnorm(log(0.1),0.5);"),
++     rprocess=gompertz@rprocess,
++     dmeasure=gompertz@dmeasure,
++     statenames=c("X"),
++     paramnames=c("r","K","sigma")) -> smc4
+> smc4 |> plot()
+> 
+> try(gompertz |>
++     as.data.frame() |>
++     subset(select=-X) |>
++     bsmc2(
++       times="time",t0=-5,
++       params=coef(gompertz),
++       Np=1000,smooth=0.1,
++       rprior=3,
++       rprocess=gompertz@rprocess,
++       dmeasure=gompertz@dmeasure,
++       statenames=c("X"),
++       paramnames=c("r","K","sigma")))
+Error : in 'bsmc2': bad option for 'rprior' argument.
+> 
+> smc |>
++   bsmc2(Np=seq(10,length=12,by=10)) |>
++   eff_sample_size()
+ [1]  5.3 14.3 21.1 17.4 11.3 18.6 32.9 61.0 61.1 34.3
+> 
+> dev.off()
+null device 
+          1 
+> 

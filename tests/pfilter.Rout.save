@@ -1,0 +1,313 @@
+
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> options(digits=3)
+> 
+> library(pomp)
+> 
+> ou2() -> ou2
+> 
+> set.seed(9994847L)
+> 
+> pf <- pfilter(ou2,Np=1000)
+> logLik(pf)
+[1] -478
+> stopifnot(logLik(pf)==sum(cond_logLik(pf)))
+> range(eff_sample_size(pf))
+[1]   2.88 243.72
+> range(cond_logLik(pf))
+[1] -9.32 -3.84
+> names(as(pf,"data.frame"))
+[1] "time"        "y1"          "y2"          "x1"          "x2"         
+[6] "ess"         "cond.logLik"
+> identical(as(pf,"data.frame"),as.data.frame(pf))
+[1] TRUE
+> 
+> try(pfilter())
+Error : in 'pfilter': 'data' is a required argument.
+> try(pfilter("bob"))
+Error : 'pfilter' is undefined for 'data' of class 'character'.
+> 
+> try(pfilter(ou2))
+Error : in 'pfilter': 'Np' must be specified.
+> try(pfilter(ou2,Np=NULL))
+Error : in 'pfilter': 'Np' must be specified.
+> try(pfilter(ou2,Np=-10))
+Error : in 'pfilter': number of particles, 'Np', must be a positive integer.
+> try(pfilter(ou2,Np=c(10,20,30)))
+Error : in 'pfilter': 'Np' must have length 1 or length 101.
+> pfilter(ou2,Np=ceiling(runif(101,min=10,max=100)))
+<object of class 'pfilterd_pomp'>
+> 
+> po <- ou2
+> coef(po) <- NULL
+> try(pfilter(po,Np=100))
+Error : in 'pfilter': in 'rprocess': variable 'x1' not found among the state variables.
+In addition: Warning message:
+in default 'rinit': there are no parameters with suffix '.0' or '_0'. See '?rinit_spec'. 
+> try(pfilter(po,Np=100,params=c()))
+Error : in 'pfilter': in 'rprocess': variable 'x1' not found among the state variables.
+In addition: Warning message:
+in default 'rinit': there are no parameters with suffix '.0' or '_0'. See '?rinit_spec'. 
+> try(pfilter(po,Np=100,params=NULL))
+Error : in 'pfilter': in 'rprocess': variable 'x1' not found among the state variables.
+In addition: Warning message:
+in default 'rinit': there are no parameters with suffix '.0' or '_0'. See '?rinit_spec'. 
+> try(pfilter(po,Np=100,params=c(1,2,3)))
+Error : in 'pfilter': 'params' must be a named numeric vector.
+> try(pfilter(po,Np=100,params=c(a=1,b=2,c=3)))
+Error : in 'pfilter': in 'rprocess': variable 'x1' not found among the state variables.
+In addition: Warning message:
+in default 'rinit': there are no parameters with suffix '.0' or '_0'. See '?rinit_spec'. 
+> try(pfilter(po,Np=100,params=list()))
+Error : in 'pfilter': in 'rprocess': variable 'x1' not found among the state variables.
+In addition: Warning message:
+in default 'rinit': there are no parameters with suffix '.0' or '_0'. See '?rinit_spec'. 
+> pf <- pfilter(po,Np=100,params=as.list(coef(ou2)))
+> 
+> pf <- pfilter(pf)
+> try(pfilter(pf,Np=-1000))
+Error : in 'pfilter': number of particles, 'Np', must be a positive integer.
+> stopifnot(all.equal(coef(pf),coef(ou2)))
+> theta <- coef(ou2)
+> theta["alpha_2"] <- 0.1
+> pf1 <- pfilter(pf,params=theta,Np=100)
+> stopifnot(identical(coef(pf1),theta))
+> 
+> try(pfilter(ou2,params=parmat(coef(ou2),100)))
+Error : in 'pfilter': 'params' must be a named numeric vector.
+> try(pfilter(ou2,Np=100,params=parmat(coef(ou2),100)))
+Error : in 'pfilter': 'params' must be a named numeric vector.
+> 
+> pf2 <- pfilter(ou2,Np=function(k)c(100,150)[(k-1)%%2+1])
+> table(pf2@Np)
+
+100 150 
+ 50  51 
+> try(pfilter(pf2,Np=function(k)c(100,-150)[(k-1)%%2+1]))
+Error : in 'pfilter': number of particles, 'Np', must be a positive integer.
+> try(pfilter(pf2,Np=function(k)c(100,-150)))
+Error : in 'pfilter': if 'Np' is a function, it must return a single positive integer.
+> try(pfilter(pf2,Np="many"))
+Error : in 'pfilter': 'Np' must be a number, a vector of numbers, or a function.
+> 
+> theta <- coef(ou2)
+> theta["tau"] <- 0
+> try(pfilter(pf,params=theta))
+<object of class 'pfilterd_pomp'>
+> theta <- coef(ou2)
+> theta["sigma_2"] <- Inf
+> try(pfilter(pf,params=theta))
+Error : in 'pfilter': 'dmeasure' with log=TRUE returns illegal value.
+Log likelihood, data, states, and parameters are:
+   time:            2
+ loglik:          NaN
+     y1:      1.83463
+     y2:       6.2733
+     x1:          Inf
+     x2:          NaN
+alpha_1:          0.8
+alpha_2:         -0.5
+alpha_3:          0.3
+alpha_4:          0.9
+sigma_1:            3
+sigma_2:          Inf
+sigma_3:            2
+    tau:            1
+   x1_0:           -3
+   x2_0:            4
+> theta <- coef(ou2)
+> theta["alpha_1"] <- 1e60
+> try(pfilter(pf,params=theta,pred.var=TRUE))
+Error : in 'pfilter': non-finite state variable: x1
+> 
+> try(pfilter(pf,rprocess=onestep(
++                  function(x, t, params, delta.t, ...)stop("yikes!"))))
+Error : in 'pfilter': in 'rprocess': yikes!
+> try(pfilter(pf,dmeasure=Csnippet("error(\"ouch!\");")))
+Error : in 'pfilter': in 'dmeasure': ouch!
+> pfilter(pf,dmeasure=function(log,...) -Inf)
+<object of class 'pfilterd_pomp'>
+> pfilter(pf,dmeasure=function(log,...) -Inf,filter.mean=TRUE)
+<object of class 'pfilterd_pomp'>
+> 
+> pf1 <- pfilter(pf,save.states="filter",filter.traj=TRUE)
+> pf2 <- pfilter(pf,pred.mean=TRUE,pred.var=TRUE,filter.mean=TRUE,save.states="prediction")
+> pf3 <- pfilter(pf,t0=1,filter.traj=TRUE)
+> pf4 <- pfilter(pf,dmeasure=Csnippet("lik = (give_log) ? R_NegInf : 0;"),
++   filter.traj=TRUE)
+> 
+> stopifnot(
++   pf2 |> filter_mean() |> dim()==c(2,100),
++   pf2 |> filter_mean(vars="x1") |> dim()==c(1,100),
++   pf2 |> filter_mean(vars=c("x2","x1")) |> dimnames() |> getElement("name")==c("x2","x1"),
++   pf2 |> filter_mean(format="d") |> dim()==c(200,3),
++   pf2 |> filter_mean(vars="x2",format="d") |> dim()==c(100,3),
++   pf2 |> filter_mean(vars="x2",format="d") |> names()==c("name","time","value"),
++   pf2 |> pred_mean() |> dim()==c(2,100),
++   pf2 |> pred_mean(vars="x1") |> dim()==c(1,100),
++   pf2 |> pred_mean(vars=c("x2","x1")) |> dimnames() |> getElement("name")==c("x2","x1"),
++   pf2 |> pred_mean(format="d") |> dim()==c(200,3),
++   pf2 |> pred_mean(vars="x2",format="d") |> dim()==c(100,3),
++   pf2 |> pred_mean(vars="x2",format="d") |> names()==c("name","time","value"),
++   pf2 |> pred_var() |> dim()==c(2,100),
++   pf2 |> pred_var(vars="x1") |> dim()==c(1,100),
++   pf2 |> pred_var(vars=c("x2","x1")) |> dimnames() |> getElement("name")==c("x2","x1"),
++   pf2 |> pred_var(format="d") |> dim()==c(200,3),
++   pf2 |> pred_var(vars="x2",format="d") |> dim()==c(100,3),
++   pf2 |> pred_var(vars="x2",format="d") |> names()==c("name","time","value")
++ )
+> 
+> pf1 |> saved_states(format="data") |> names()
+[1] "time"  ".id"   "name"  "value"
+> pf1 |> saved_states(format="data") |> dim()
+[1] 20000     4
+> pf1 |> saved_states() |> melt() |> sapply(class)
+        .L1        name         .id       value 
+  "integer" "character"   "integer"   "numeric" 
+> pf1 |> saved_states() |> melt() |> sapply(length)
+  .L1  name   .id value 
+20000 20000 20000 20000 
+> pf2 |> saved_states(format="data") |> names()
+[1] "time"  ".id"   "name"  "value"
+> pf2 |> saved_states(format="data") |> dim()
+[1] 30000     4
+> 
+> c(A=pf1,B=pf2) |> class()
+[1] "pfilterList"
+attr(,"package")
+[1] "pomp"
+> c(A=pf1,B=pf2) |> saved_states(format="d") |> class()
+[1] "data.frame"
+> c(A=pf1,B=pf2) |> saved_states(format="d") |> names()
+[1] ".L1"   "time"  ".id"   "name"  "value"
+> c(pf1,pf2) |> saved_states(format="d") |> names()
+[1] ".L1"   "time"  ".id"   "name"  "value"
+> c(A=pf1,B=pf2) |> saved_states(format="d") |> sapply(class)
+        .L1        time         .id        name       value 
+"character"   "numeric"   "integer" "character"   "numeric" 
+> c(A=pf1,B=pf2) |> as.data.frame() |> sapply(class)
+           .L1           time             y1             y2            ess 
+   "character"      "numeric"      "numeric"      "numeric"      "numeric" 
+   cond.logLik   pred.mean.x1   pred.mean.x2    pred.var.x1    pred.var.x2 
+     "numeric"      "numeric"      "numeric"      "numeric"      "numeric" 
+filter.mean.x1 filter.mean.x2 
+     "numeric"      "numeric" 
+> 
+> names(as(pf2,"data.frame"))
+ [1] "time"           "y1"             "y2"             "ess"           
+ [5] "cond.logLik"    "pred.mean.x1"   "pred.mean.x2"   "pred.var.x1"   
+ [9] "pred.var.x2"    "filter.mean.x1" "filter.mean.x2"
+> dim(filter_traj(pf3))
+[1]   2   1 100
+> dimnames(filter_traj(pf3))
+$name
+[1] "x1" "x2"
+
+$rep
+[1] "1"
+
+$time
+NULL
+
+> try(filter_traj(c(pf1,pf3)))
+Error : in 'filter_traj': incommensurate dimensions.
+> dim(filter_traj(c(pf1,pf4)))
+[1]   2   1 101   2
+> dim(as.data.frame(c(pf1,pf4)))
+[1] 200   6
+> names(dimnames(filter_traj(c(pf1,pf4))))
+[1] "name"  "rep"   "time"  "chain"
+> names(as(c(pf1,pf4),"data.frame"))
+[1] ".L1"         "time"        "y1"          "y2"          "ess"        
+[6] "cond.logLik"
+> pf2 |> as.data.frame() |> names()
+ [1] "time"           "y1"             "y2"             "ess"           
+ [5] "cond.logLik"    "pred.mean.x1"   "pred.mean.x2"   "pred.var.x1"   
+ [9] "pred.var.x2"    "filter.mean.x1" "filter.mean.x2"
+> try(saved_states())
+Error : in 'saved_states': 'object' is a required argument.
+> try(saved_states(NULL))
+Error : 'saved_states' is undefined for 'object' of class 'NULL'.
+> try(saved_states("bob"))
+Error : 'saved_states' is undefined for 'object' of class 'character'.
+> stopifnot(
++   filter_traj(pf1,vars="x2") |> dim()==c(1,1,101),
++   filter_traj(pf1,vars="x2",format="d") |> dim()==c(101,4)
++ )
+> 
+> try(ou2 |> as.data.frame() |> pfilter(Np=1000))
+Error : in 'pfilter': 'times' should either be a numeric vector of observation times or a single name identifying the column of data that represents the observation times.
+> 
+> ou2 |>
++   as.data.frame() |>
++   subset(select=c(time,y1,y2)) |>
++   pfilter(
++     times="time",t0=0,Np=500,
++     params=list(x1_0=-3,x2_0=4),
++     rprocess=onestep(
++       step.fun=function(x1,x2,delta.t,...) {
++         setNames(rnorm(n=2,mean=c(x1,x2),sd=5*delta.t),c("x1","x2"))
++       }
++     ),
++     dmeasure=function(x1,x2,y1,y2,...,log) {
++       ll <- sum(dnorm(x=c(y1,y2),mean=c(x1,x2),sd=5,log=TRUE))
++       if (log) ll else exp(ll)
++     }
++   )
+<object of class 'pfilterd_pomp'>
+> 
+> try(ou2 |> pfilter(Np=1000) |> forecast())
+Error : in 'forecast': no prediction mean. Rerun 'pfilter' with 'pred.mean=TRUE'.
+> try(ou2 |> pfilter(Np=1000,emeasure=NULL) |> forecast())
+Error : in 'forecast': 'emeasure' is a needed basic component.
+> ou2 |> pfilter(Np=1000,pred.mean=TRUE) |> forecast() -> y
+> ou2 |> pfilter(Np=1000,pred.mean=TRUE) |> forecast(vars="y1") -> y1
+> stopifnot(
++   dim(y)==c(2,100),
++   dim(y1)==c(1,100)
++ )
+> 
+> set.seed(1); pf_no <- pfilter(ou2, Np = 100, save.states = "no")
+> set.seed(1); pf_false <- pfilter(ou2, Np = 100, save.states = FALSE)
+Warning message:
+The 'save.states' option 'FALSE' is deprecated and will be removed in a future version.
+Use 'no' instead. 
+> set.seed(1); pf_true <- pfilter(ou2, Np = 100, save.states = TRUE)
+Warning message:
+The 'save.states' option 'TRUE' is deprecated and will be removed in a future version.
+Use 'filter' instead. 
+> set.seed(1); pf_unweighted <- pfilter(ou2, Np = 100, save.states = "unweighted")
+Warning message:
+The 'save.states' option 'unweighted' is deprecated and will be removed in a future version.
+Use 'filter' instead. 
+> set.seed(1); pf_filter <- pfilter(ou2, Np = 100, save.states = "filter")
+> set.seed(1); pf_weighted <- pfilter(ou2, Np = 100, save.states = "weighted")
+Warning message:
+The 'save.states' option 'weighted' is deprecated and will be removed in a future version.
+Use 'prediction' instead. 
+> set.seed(1); pf_predict <- pfilter(ou2, Np = 100, save.states = "prediction")
+> stopifnot(
++   all.equal(unlist(saved_states(pf_unweighted)), unlist(saved_states(pf_filter))),
++   all.equal(unlist(saved_states(pf_true)), unlist(saved_states(pf_filter))),
++   all.equal(unlist(saved_states(pf_weighted)[2]), unlist(saved_states(pf_predict)[2])),
++   length(saved_states(pf_no)) == 0,
++   length(saved_states(pf_false)) == 0
++ )
+> 

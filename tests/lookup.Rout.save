@@ -1,0 +1,221 @@
+
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> options(digits=3)
+> suppressPackageStartupMessages({
++   library(tidyr)
++   library(ggplot2)
++ })
+> 
+> png(filename="lookup-%02d.png",res=100)
+> 
+> library(pomp)
+> 
+> ct <- covariate_table(x=20:30,y=10:0,times=seq(0,10))
+> lookup(ct,t=c(1,2.3,4,7,20))
+     t    x     y
+1  1.0 21.0   9.0
+2  2.3 22.3   7.7
+3  4.0 24.0   6.0
+4  7.0 27.0   3.0
+5 20.0 40.0 -10.0
+Warning message:
+in 'table_lookup': extrapolating at 2.000000e+01. 
+> ct <- covariate_table(x=20:30,y=10:0,times=seq(0,10),order="constant")
+> lookup(ct,t=c(1,2.3,4,7))
+    t  x y
+1 1.0 21 9
+2 2.3 22 8
+3 4.0 24 6
+4 7.0 27 3
+> lookup(ct,t=6.1)
+    t  x y
+1 6.1 26 4
+> plot(y~t,data=lookup(ct,t=seq(0,10.5,by=0.01)),type="l")
+There were 50 or more warnings (use warnings() to see the first 50)
+> lines(seq(0,10),10:0,col="blue",type="s")
+> plot(x~t,data=lookup(ct,t=seq(0,10.5,by=0.01)),type="l")
+There were 50 or more warnings (use warnings() to see the first 50)
+> lines(seq(0,10),20:30,col="blue",type="s")
+> 
+> ct <- covariate_table(x=20:31,y=12:1,times=c(0:5,5:10),order="constant")
+> lookup(ct,t=seq(4.9,5.1,by=0.05))
+     t  x y
+1 4.90 24 8
+2 4.95 24 8
+3 5.00 26 6
+4 5.05 26 6
+5 5.10 26 6
+> 
+> try(covariate_table(x=20:30,y=10:0,times=seq(10,0)))
+Error : in 'covariate_table': 'times' must be a non-decreasing numeric sequence (without missing values).
+> try(covariate_table(x=20:23,y=10:0,times=seq(0,10)))
+Error : in 'covariate_table': binding columns: arguments imply differing number of rows: 4, 11
+> try(covariate_table(x=20:30,y=10:0,times=seq(0,3)))
+Error : in 'covariate_table': 'times' must agree in length with the covariates.
+> covariate_table()
+<none>
+> try(covariate_table(times=1:10))
+Error : in 'covariate_table': no covariates specified.
+> try(covariate_table(a=1:10,times=1))
+Error : in 'covariate_table': 'times' must agree in length with the covariates.
+> try(covariate_table(a=1:10,times="a"))
+Error : in 'covariate_table': no covariates specified.
+> try(covariate_table(a=1:10))
+Error : in 'covariate_table': 'times' is a required argument.
+> covariate_table(a=1:10,a=10:1,times=1:10)
+
+  - 10 records of 1 covariates, recorded from t = 1 to 10 
+  - summary of covariates:
+       a        
+ Min.   : 1.00  
+ 1st Qu.: 3.25  
+ Median : 5.50  
+ Mean   : 5.50  
+ 3rd Qu.: 7.75  
+ Max.   :10.00  
+> try(covariate_table(a=1:10,a=10:1,times="a"))
+Error : in 'covariate_table': no covariates specified.
+> try(covariate_table(data.frame(a=1:10,a=10:1,check.names=FALSE),b=1:10,times="b"))
+Error : in 'covariate_table': names of covariates must be unique.
+> try(covariate_table(data.frame(a=1:10,a=10:1),b=1:10,times="b"))
+
+  - 10 records of 2 covariates, recorded from t = 1 to 10 
+  - summary of covariates:
+       a              a_1       
+ Min.   : 1.00   Min.   : 1.00  
+ 1st Qu.: 3.25   1st Qu.: 3.25  
+ Median : 5.50   Median : 5.50  
+ Mean   : 5.50   Mean   : 5.50  
+ 3rd Qu.: 7.75   3rd Qu.: 7.75  
+ Max.   :10.00   Max.   :10.00  
+> try(covariate_table(a=1:10,b=10:1,times="b"))
+Error : in 'covariate_table': 'times' must be a non-decreasing numeric sequence (without missing values).
+> try(covariate_table(a=1:10,b=10:1,times="c"))
+Error : in 'covariate_table': 'times' does not identify a unique time variable.
+> try(covariate_table(a=1:10,b=10:1,times=NA))
+Error : 'covariate_table' is undefined for 'times' of class 'logical'.
+> 
+> covariate_table(
++   bspline_basis(times,nbasis=8,degree=3,deriv=0,names="f0"),
++   bspline_basis(times,nbasis=8,degree=3,deriv=1,names="f1"),
++   times=seq(0,10,by=0.1)
++ ) |>
++   lookup(t=seq(0,10,by=0.01)) |>
++   pivot_longer(-t) |>
++   separate(name,into=c("variable","n")) |>
++   ggplot(aes(x=t,y=value,color=factor(n)))+
++   labs(color="element",y="",x="")+
++   geom_line()+
++   facet_grid(variable~.,
++     labeller=labeller(variable=c(f1="derivative",f0="function")))+
++   theme_bw()
+> 
+> covariate_table(
++   x=seq(1,10,by=1),
++   y=seq(2,20,by=2),
++   times="x"
++ ) -> tab
+> lookup(tab,c(0,2.5,3.6,10,20))
+     t    y
+1  0.0  0.0
+2  2.5  5.0
+3  3.6  7.2
+4 10.0 20.0
+5 20.0 40.0
+Warning messages:
+1: in 'table_lookup': extrapolating at 0.000000e+00. 
+2: in 'table_lookup': extrapolating at 2.000000e+01. 
+> 
+> repair_lookup_table(tab,t=c(seq(0,10),20)) -> tab2
+Warning messages:
+1: in 'table_lookup': extrapolating at 0.000000e+00. 
+2: in 'table_lookup': extrapolating at 2.000000e+01. 
+> lookup(tab2,c(0,2.5,3.6,10,20))
+     t    y
+1  0.0  0.0
+2  2.5  5.0
+3  3.6  7.2
+4 10.0 20.0
+5 20.0 40.0
+> 
+> covariate_table(
++   x=seq(1,10,by=1),
++   y=seq(1,10,by=1),
++   order="const",
++   times="x"
++ ) -> tab
+> lookup(tab,c(0,2.5,3.6,10,20))
+     t  y
+1  0.0  1
+2  2.5  2
+3  3.6  3
+4 10.0 10
+5 20.0 10
+Warning messages:
+1: in 'table_lookup': extrapolating at 0.000000e+00. 
+2: in 'table_lookup': extrapolating at 2.000000e+01. 
+> 
+> repair_lookup_table(tab,t=c(seq(0,10,by=1),20)) -> tab2
+Warning messages:
+1: in 'table_lookup': extrapolating at 0.000000e+00. 
+2: in 'table_lookup': extrapolating at 2.000000e+01. 
+> lookup(tab2,c(0,2.5,3.6,10,20))
+     t  y
+1  0.0  1
+2  2.5  2
+3  3.6  3
+4 10.0 10
+5 20.0 10
+> 
+> covariate_table(
++   x=seq(1,10,by=1),
++   y=seq(1,10,by=1),
++   order="const",
++   times="x"
++ ) -> tab
+> 
+> repair_lookup_table(tab,t=c(seq(0,10,by=1),20),order="lin") -> tab2
+Warning messages:
+1: in 'table_lookup': extrapolating at 0.000000e+00. 
+2: in 'table_lookup': extrapolating at 2.000000e+01. 
+> lookup(tab2,c(0,2.5,3.6,10,20))
+     t    y
+1  0.0  1.0
+2  2.5  2.5
+3  3.6  3.6
+4 10.0 10.0
+5 20.0 10.0
+> 
+> repair_lookup_table(tab,t=c(seq(0,10,by=1),20),order="const") -> tab2
+Warning messages:
+1: in 'table_lookup': extrapolating at 0.000000e+00. 
+2: in 'table_lookup': extrapolating at 2.000000e+01. 
+> lookup(tab2,c(0,2.5,3.6,10,20))
+     t  y
+1  0.0  1
+2  2.5  2
+3  3.6  3
+4 10.0 10
+5 20.0 10
+> 
+> dev.off()
+null device 
+          1 
+> 

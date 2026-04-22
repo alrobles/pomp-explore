@@ -1,0 +1,76 @@
+
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(pomp)
+> 
+> logmeanexp(rep(10,10),se=TRUE)
+est  se 
+ 10   0 
+> logmeanexp(10^seq(8,10),se=TRUE)
+  est    se 
+1e+10 6e+09 
+> logmeanexp(c(1.2e-100,1.4e-100,1.8e-100),se=TRUE)
+          est            se 
+1.800000e-100 2.666667e-101 
+> logmeanexp(c(1e-200,1.5e-200,1.6e-200))
+[1] 1.6e-200
+> logmeanexp(10^seq(8,10),se=NA)
+[1] 1e+10
+> logmeanexp(10^seq(8,10),se=NULL)
+[1] 1e+10
+> logmeanexp(rep(10,10),ess=TRUE)
+est ess 
+ 10  10 
+> logmeanexp(10^seq(8,10),ess=TRUE)
+  est   ess 
+1e+10 1e+00 
+> logmeanexp(c(1.2e-100,1.4e-100,1.8e-100),se=TRUE,ess=TRUE)
+          est            se           ess 
+1.800000e-100 2.666667e-101  3.000000e+00 
+> 
+> x1 <- freeze(-rexp(10,rate=0.1),seed=1951379414)
+> x1 <- x1-max(x1)
+> stopifnot(
++   all.equal(logmeanexp(x1),log(mean(exp(x1))))
++ )
+> logmeanexp(x1,se=TRUE)
+      est        se 
+-2.149512  1.744263 
+> logmeanexp(x1,ess=TRUE)
+      est       ess 
+-2.149512  1.342667 
+> logmeanexp(x1,ess=TRUE,se=TRUE)
+      est        se       ess 
+-2.149512  1.744263  1.342667 
+> 
+> x2 <- freeze(-rexp(10,rate=10),seed=1951379414)
+> x2 <- x2-max(x2)
+> stopifnot(
++   all.equal(logmeanexp(x2),log(mean(exp(x2))))
++ )
+> logmeanexp(x2,se=TRUE)
+        est          se 
+-0.10234692  0.03252946 
+> logmeanexp(x2,ess=TRUE)
+       est        ess 
+-0.1023469  9.9047782 
+> logmeanexp(x2,ess=TRUE,se=TRUE)
+        est          se         ess 
+-0.10234692  0.03252946  9.90477816 
+> 

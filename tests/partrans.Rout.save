@@ -1,0 +1,114 @@
+
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(pomp)
+> 
+> gompertz() -> gompertz
+> set.seed(995868671L)
+> 
+> theta1 <- coef(gompertz)
+> theta2 <- coef(gompertz,transform=TRUE)
+> stopifnot(all.equal(partrans(gompertz,theta1,dir="toEst"),theta2))
+> stopifnot(all.equal(partrans(gompertz,theta2,dir="fromEst"),theta1))
+> theta3 <- theta2[order(runif(5))]
+> stopifnot(any(names(theta1)!=names(theta3)))
+> stopifnot(all.equal(partrans(gompertz,theta3)[names(theta1)],theta1))
+> 
+> theta3 <- theta2[-1]
+> try(partrans(params=theta1))
+Error : in 'partrans': 'object' is a required argument.
+> try(partrans("gompertz",params=theta1))
+Error : 'partrans' is undefined for 'object' of class 'character'.
+> try(partrans(gompertz,theta3))
+Error : in 'partrans': variable 'K' not found among the parameters.
+> try(partrans(pomp(gompertz,partrans=parameter_trans(from=Csnippet("K = exp(T_K);")),
++   paramnames="K"),theta3))
+Error in h(simpleError(msg, call)) : 
+  error in evaluating the argument 'object' in selecting a method for function 'partrans': in 'parameter_trans': if one of 'toEst', 'fromEst' is supplied, then so must the other be.
+> try(partrans(pomp(gompertz,partrans=parameter_trans(from=Csnippet("K = exp(T_K);"),
++   to=Csnippet("T_K = log(K);")),paramnames="K"),theta3))
+Error : in 'partrans': variable 'K' not found among the parameters.
+> try(partrans(pomp(gompertz,partrans=parameter_trans(log="K"),paramnames="K"),
++   theta3))
+Error : in 'partrans': variable 'K' not found among the parameters.
+> try(partrans(pomp(gompertz,partrans=parameter_trans(from=function(params,...)unname(params),
++   to=function(params,...)unname(params))),theta3))
+Error : in 'partrans': argument "params" is missing, with no default
+> 
+> pp <- parmat(coef(gompertz),100)
+> pp["r",] <- runif(100,0,100)
+> stopifnot(all.equal(partrans(gompertz,partrans(gompertz,pp,dir="to")),pp))
+> try(partrans(pomp(gompertz,partrans=parameter_trans(
++   from=function(...)unname(list(...)),to=function(...)unname(list(...)))),pp))
+Error : in 'partrans': user transformation functions must return named numeric vectors.
+> try(partrans(pomp(gompertz,partrans=parameter_trans(
++   from=function(...)unname(list(...)),to=NULL)),pp))
+Error in h(simpleError(msg, call)) : 
+  error in evaluating the argument 'object' in selecting a method for function 'partrans': 'parameter_trans' not defined for arguments of class 'NULL', 'function'.
+> 
+> parameter_trans(toEst=NULL,fromEst=NULL)
+  - to estimation scale: <identity>
+  - from estimation scale: <identity>
+> try(parameter_trans(toEst=NULL))
+Error : in 'parameter_trans': if one of 'toEst', 'fromEst' is supplied, then so must the other be.
+> try(parameter_trans(fromEst=NULL))
+Error : in 'parameter_trans': if one of 'toEst', 'fromEst' is supplied, then so must the other be.
+> 
+> parameter_trans(logit=c("a","b","c"))
+  - to estimation scale: An object of class "Csnippet"
+Slot "text":
+[1] "\n  T_a = logit(a);\n  T_b = logit(b);\n  T_c = logit(c);"
+
+  - from estimation scale: An object of class "Csnippet"
+Slot "text":
+[1] "\n  a = expit(T_a);\n  b = expit(T_b);\n  c = expit(T_c);"
+
+> pomp:::has_partrans(gompertz)
+[1] TRUE
+> 
+> stopifnot(
++   {
++     partrans(
++       pomp(gompertz,
++         partrans=parameter_trans(
++           from=function(r,...) c(r=exp(r)),
++           to=function(r,...) c(r=log(r))
++         )
++       ),
++       params=parmat(coef(gompertz),2),
++       dir="to"
++     ) -> p1
++     partrans(
++       pomp(gompertz,
++         partrans=parameter_trans(
++           from=function(r,...) c(r=exp(r)),
++           to=function(r,...) c(r=log(r))
++         )
++       ),
++       params=p1,
++       dir="from"
++     ) -> p2
++     all.equal(p2,parmat(coef(gompertz),2))
++   }
++ )
+> 
+> ou2() -> ou2
+> pp <- parmat(coef(ou2),10)
+> stopifnot(all.equal(partrans(ou2,partrans(ou2,pp,dir="to"),dir="from"),pp))
+> 

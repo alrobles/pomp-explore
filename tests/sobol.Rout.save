@@ -1,0 +1,48 @@
+
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> png(filename="sobol-%02d.png",res=100)
+> library(pomp)
+> 
+> ## Sobol' low-discrepancy design
+> plot(sobol_design(lower=c(a=0,b=100),upper=c(b=200,a=1),100))
+> 
+> try(sobol_design(lower=c(a=0,b=100),upper=c(b=200,a=1,q=99),10))
+Error : in 'sobol_design': 'lower' and 'upper' must have same length.
+> try(sobol_design(lower=c(0,100),upper=c(b=200,a=1),10))
+Error : in 'sobol_design': 'lower' and 'upper' must be named vectors.
+> try(sobol_design(lower=c(a=0,b=100),upper=c(b=200,c=1),10))
+Error : in 'sobol_design': names of 'lower' and 'upper' must match.
+> 
+> try(sobol_design(lower=c(a=0,b=100),upper=c(b=200,a=1),2^30+1))
+Error : in 'sobol_design': too many points requested.
+> 
+> rnames <- sprintf("n%04d",1:5000)
+> try(sobol_design(lower=setNames(runif(5000),rnames),
++                 upper=setNames(runif(5000,min=-1,max=0),rnames),
++                 100))
+Error : in 'sobol_design': dimension is too high
+> x <- sobol_design(lower=setNames(runif(15),head(rnames,15)),
++   upper=setNames(runif(15,min=1,max=2),head(rnames,15)),
++   100)
+> 
+> dev.off()
+null device 
+          1 
+> 

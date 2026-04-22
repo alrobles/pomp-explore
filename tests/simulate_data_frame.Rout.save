@@ -1,0 +1,81 @@
+
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> options(digits=3)
+> 
+> library(pomp)
+> library(dplyr)
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+> 
+> set.seed(1041414791L)
+> 
+> data.frame(t=0:10,y=runif(11)) |>
++   simulate(times="t",t0=0,
++     rprocess=discrete_time(
++       step.fun=function(r,x,...) {
++         c(x=r*x*exp(-x))
++       }),
++     rmeasure=function(x,...) {
++       c(y=rpois(n=1,100*x))
++     },
++     params=list(r=15,x.0=0.1)
++   )
+<object of class 'pomp'>
+> 
+> try(data.frame(t=0:10,y=runif(11)) |>
++     simulate(times="t",t0=0,
++       rprocess=discrete_time(
++         step.fun=function(r,x,...) {
++           c(x=r*x*exp(-x))
++         }),
++       rmeasure=function(x,...) {
++         c(y=rpois(n=1,100*x))
++       },
++       params=list(r=15,x.0=0.1),
++       format="bob"
++     )
++ )
+Error : in 'simulate': 'arg' should be one of "pomps", "arrays", "data.frame"
+> 
+> try(data.frame(t=0:10,y=runif(11)) |>
++   simulate(times=1:50))
+Error : in 'simulate': 't0' is a required argument.
+> try(data.frame(t=0:10,y=runif(11)) |>
++     simulate(times="t"))
+Error : in 'simulate': 't0' is a required argument.
+> try(data.frame(t=0:10,y=runif(11)) |>
++     simulate(times="t",t0=0))
+Error : in 'simulate': 'rprocess' is undefined.
+> try(data.frame(t=0:10,y=runif(11)) |>
++     simulate(times="t",t0=0))
+Error : in 'simulate': 'rprocess' is undefined.
+> try(data.frame(t=0:10,y=runif(11)) |>
++     simulate(times="t",t0=0,params=c(x.0=1)))
+Error : in 'simulate': 'rprocess' is undefined.
+> 

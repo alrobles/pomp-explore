@@ -1,0 +1,1826 @@
+_N_e_w_s _f_o_r _p_a_c_k_a_g_e '_p_o_m_p'
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _6._3._1:
+
+        • ‘coef’ can now extract parameters by name from a ‘listie’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _6._2._1:
+
+        • The built-in examples that use simulated data add a ‘seed’
+          argument to allow changing the simulated data.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _6._1._1:
+
+        • The basic Kalman filter (‘kalmanFilter’) has been refactored,
+          with a roughly 3-fold speed up.
+
+        • Some internal changes have been made in anticipation of
+          changes to the C API for R.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _6._0._5:
+
+        • It is now possible to specify more than one lag in the ‘ivp’
+          function, which is evaluated only when the ‘mif2’
+          perturbations are specified.  See ‘?mif2’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _6._0._4:
+
+        • The new function ‘append_data’ appends a data frame to an
+          existing CSV file (creating the file if it does not exist).
+          This facilitates keeping a database of parameter-space
+          explorations.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _6._0._3:
+
+        • The new function ‘eeulermultinom’ gives the expectation of an
+          Euler-multinomial random variable.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _6._0._2:
+
+        • The ‘save.states’ option to ‘pfilter’ has changed.  See
+          ‘?pfilter’ and ‘?saved_states’ for details.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _6._0._1:
+
+        • In calls to ‘pomp’ elementary and inference algorithms, it is
+          now necessary to pass all arguments by name.  This has always
+          been good practice, but from this release, calls that rely on
+          the position of arguments will typically generate errors.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _6._0._0:
+
+        • From version 5.8.4, the manner in which extra model elements
+          (‘userdata’) are supplied has changed.  As of that version,
+          use of the old method generated a warning.  As of this
+          version, an error will be generated.  To supply additional
+          elements (i.e., beyond parameters, latent-state variables,
+          observations, and covariates) to the basic model components,
+          provide them as a list via the ‘userdata’ argument.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._1_1._1:
+
+        • A new addition to the C API allows one to easily compute the
+          expectation of the Euler-multinomial.  The function is
+          ‘eeulermultinom’.
+
+        • The help-page discussion of accumulator variables has been
+          expanded and clarified.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._1_0._1:
+
+        • An improper typecast in the C snippet system, which was
+          resolvable by many compilers but threw an error under recent
+          versions of ‘clang’ on MacOS, has been repaired.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._9._1:
+
+        • The rprocess plugin ‘onestep’ now always takes exactly one
+          step to get from one observation time to the next, even when
+          the interval between them is zero.  That is, if ‘P’ is a
+          ‘pomp’ object with an rprocess built using
+          ‘rprocess=onestep(f)’, ‘t0=timezero(P)’, and ‘t=time(P)’,
+          then ‘f’ will be called exactly once for the interval
+          (‘t0’,‘t[1]’) and once for each of the intervals
+          (‘t[i-1]’,‘t[i]’), ‘i=2,...,length(t)’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._8._4:
+
+        • To add additional elements for use by the basic model
+          components (i.e., “userdata”), the ‘userdata’ argument should
+          now be used.  The old behavior will still work, but will
+          generate a warning.  In a future release, this will become an
+          error.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._8._3:
+
+        • Internally, ‘pomp’ codes no longer include ‘Rinternal.h’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._8._2:
+
+        • A bug in covariate-table extrapolation for the case
+          ‘order="constant"’ has been fixed.
+
+        • A new experimental function ‘repair_lookup_table’ is provided
+          to help eliminate unnecessary warnings about extrapolation.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._8._1:
+
+        • Functions with names that include dots (‘.’), which have been
+          defunct since version 4.7, have been expunged.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._7._1:
+
+        • The ‘err()’ and ‘warn()’ C-level macros have been redefined
+          to forestall problems that would arise when these macros are
+          included in C++ code under forthcoming versions of R.
+
+        • More changes in C codes to forestall issues detected by
+          ‘rchk’.
+
+        • Minor corrections to documentation.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._6._1:
+
+        • Minor corrections to documentation.
+
+        • Changes in some C codes to avoid issues detected by ‘rchk’.
+
+        • Fixed bug in ‘wquant’ introduced by changes in ‘pbeta’ with R
+          version 4.3.3.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._5._2:
+
+        • Minor corrections to documentation.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._5._1:
+
+        • C-level functions ‘set_pomp_userdata’ and
+          ‘unset_pomp_userdata’ are no longer exported.
+
+        • ‘bspline_eval’ is no longer exported.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._4._4:
+
+        • C-level functions ‘set_pomp_userdata’ and
+          ‘unset_pomp_userdata’ have been temporarily restored.  The
+          latter generates a warning.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._4._3:
+
+        • There is now access to ordinary B-spline basis functions (and
+          their derivatives) at the C snippet level.  It will still
+          almost always be preferable to construct a spline basis once
+          and pass it to ‘pomp’ functions as part of a
+          ‘covariate_table’, but this functionality may occasionally be
+          useful.
+
+        • ‘bspline_eval’ is now deprecated as part of the ‘pomp’ C API.
+
+        • The formatting of some printed messages has been modified to
+          forestall warnings in the latest R-devel.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._4._2:
+
+        • Stateful objective functions (class ‘objfun’) now behave as
+          if they are ‘pomp’ objects.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._4._1:
+
+        • C-level functions ‘set_pomp_userdata’ and
+          ‘unset_pomp_userdata’ are no longer exported.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._3._1:
+
+        • ‘stew’ now returns timing information by default.
+
+        • The spurious warnings associated with NULL ‘userdata’ have
+          been eliminated.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._2._5:
+
+        • The new option ‘on_load’ allows one to specify a C snippet
+          that will be executed at the time the C snippet library is
+          loaded.
+
+        • Internally, the ‘userdata’ are made available via calls to
+          ‘pompLoad’ rather than within each call to a ‘pomp’
+          workhorse.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._2._4:
+
+        • The data frames returned by ‘cond_logLik’ and
+          ‘eff_sample_size’ when ‘format="data.frame"’ have been
+          improved.  In particular, they contain (as variable ‘time’)
+          the times (rather than the index of the time vector as
+          before).
+
+        • Changes to the report generated by ‘spy’.
+
+        • Some documentation improvements.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._2._3:
+
+        • The manual pages have been reorganized, with improved
+          cross-linking.
+
+        • A bug in ‘filter_traj’ etc. arising when not all state
+          variables have names was fixed.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._2._2:
+
+        • This version adds the new basic component ‘dinit’ for
+          evaluating the probability density function of the
+          initial-state distribution.  There is a corresponding
+          workhorse function, ‘dinit()’.
+
+        • The constructor ‘pomp’ now takes the optional argument
+          ‘nstatevars’, which can be used to increase the dimension of
+          the latent state-vectors created by ‘rinit’.  By default,
+          ‘nstatevars = length(statenames)’, and ‘nstatevars’ can only
+          be used to _increase_, not to decrease, the dimension of the
+          latent state process.  Moreover, ‘nstatevars’ has no effect
+          if the ‘rinit’ basic component is furnished as an R function.
+
+        • Name checking on internally-created vectors and arrays is
+          less strict than previously.  In particular, it is possible
+          to have variables without names (i.e., ‘""’).
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._2._1:
+
+        • ‘reulermultinom’ now returns ‘NA’ rather than ‘NaN’, in
+          keeping with the behavior of ‘rbinom’.  Thanks to John Drake
+          for calling attention to this issue.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._1._1:
+
+        • A bug in ‘stew’ resulting in namespace conflicts has been
+          repaired.
+
+        • We no longer import directly from ‘tidyverse’ functions.
+          This reduces the list of packages upon which ‘pomp’ depends
+          from 20 to 5.  This does introduce a dependency on the
+          ‘data.table’ package.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._0._1:
+
+        • When the archive directory does not exist, ‘bake’ and ‘stew’
+          now create it.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _5._0._0:
+
+        • We no longer import from ‘plyr’.
+
+        • The ‘dimnames’ attributes of various arrays that appear in
+          ‘pomp’, including arrays of observables, state variables,
+          parameters, covariates, and so on, have been made uniform.
+          In particular, when a dimension of an array corresponds to
+          variables with different names, this dimension is itself
+          named “name”.  Previously, its name was sometimes “variable”
+          and sometimes “parameter”.  This change is meant to
+          streamline interaction with the ‘tidyverse’.
+
+        • Some minor bugfixes.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._7._0:
+
+        • Functions with names.that.contain.dots that have been
+          deprecated since version 4.5.1 are now defunct.  Attempts to
+          use such functions will generate an error with a message
+          indicating the replacement function.
+
+        • ‘plot’ now removes ‘NA’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._6._4:
+
+        • Better handling of ‘listie’s (lists of ‘pomp’ objects).
+
+        • New ‘concat’ function to turn lists of ‘pomp’ objects into
+          ‘listies’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._6._3:
+
+        • Bug fix in ‘filter_traj’ applied to ‘pfilterList’ and
+          ‘pmcmcList’ objects.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._6._2:
+
+        • The ‘states’ and ‘obs’ methods take a new optional argument,
+          ‘format’.  Setting ‘format="data.frame"’ causes the method to
+          return the states or data in a convenient data-frame format.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._6._1:
+
+        • When ‘melt’ is applied to a list, the identifier variable is
+          now “‘.Lx’”, where ‘x’ denotes the level.  This applies when
+          ‘as.data.frame’ is used to coerce a list of ‘pomp’ objects,
+          and when ‘saved_states’ is used to extract the particles from
+          a list of ‘pfilterd_pomp’ objects.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._5._3:
+
+        • ‘logmeanexp’ can now compute the effective sample size, which
+          can be useful in determining the reliability of its estimate.
+          To do so, set ‘ess=TRUE’ in a call to ‘logmeanexp’.
+
+        • ‘logmeanexp’ now returns a fully-named vector when either
+          ‘se=TRUE’ or ‘ess=TRUE’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._5._2:
+
+        • A new ‘format’ argument has been added to the extractor
+          functions ‘cond_logLik’, ‘eff_sample_size’, ‘filter_mean’,
+          ‘filter_traj’, ‘forecast’, ‘pred_mean’, ‘pred_var’, and
+          ‘saved_states’.  This allows the user to extract the relevant
+          elements in data-frame format if desired.
+
+        • ‘pomp’ no longer depends on the superseded package
+          ‘reshape2’.  The ‘melt’ function for converting arrays and
+          nested lists into data frames is accordingly no longer
+          re-exported from ‘reshape2’.  It has been replaced by a
+          stricter version of ‘melt’.
+
+        • The ‘magrittr’ pipe ‘%>%’ is no longer re-exported by ‘pomp’:
+          use the native R pipe ‘|>’ instead.
+
+        • The package now requires R version 4.1 at least.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._5._1:
+
+        • All ‘pomp’ functions with names.that.contain.dots have been
+          deprecated in favor of functions in ‘snake_case’.  This is to
+          avoid anticipated problems with CRAN checks, which (falsely)
+          assume that certain functions with dotted.names are S3
+          methods.  From this point, no exported ‘pomp’ function has
+          such a name.
+
+        • The ‘dimnames’ attributes for some of the arrays computed in
+          ‘pfilter’ and ‘pmcmc’ computations have changed.  In
+          particular, whereas in previous versions, the ‘time’
+          dimension was given names that were character strings
+          composed of decimal representations of the time (difficult to
+          work with and prone to roundoff error), the ‘time’ dimension
+          now is not given names.
+
+        • A bug that resulted in ‘gompertz’ giving different
+          simulations on Windows machines has been fixed.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._4._3:
+
+        • A bug in trajectory computation for maps (discrete-time
+          dynamical systems) has been fixed.  Thanks to Felicia
+          Magpantay for noticing it and tracking it down.
+
+        • Minor documentation improvements.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._4._2:
+
+        • The weighted quantile function ‘wquant’ now uses the
+          Harrell-Davis estimator instead of the type-7 estimator used
+          previously.  This eliminates bugs associated with non-integer
+          weights.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._4._1:
+
+        • It is now possible to retrieve the weighted particles
+          computed in the course of a ‘pfilter’ computation.  To
+          accomplish this, set ‘save.states="weighted"’ in the call to
+          ‘pfilter’ and retrieve the particles and their weights using
+          ‘saved.states’.  Previously, one could obtain only the
+          unweighted particles.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._4._0:
+
+        • Some documentation improvements.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._3._4:
+
+        • The new function ‘wquant’ computes weighted quantiles.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._3._3:
+
+        • The precise order in which the ‘pmcmc’ function computes
+          prior and likelihood of furnished and proposed parameters has
+          changed slightly.  This prevents proposals that are
+          incompatible with the prior from being passed to ‘pfilter’
+          and forestalls an associated class of errors.  A consequence
+          of this change, ‘pmcmc’ computations using the new version
+          will differ very slightly from previous computations, even
+          with the RNG seed fixed at its previous values.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._3._2:
+
+        • There is now a C interface to the ‘bspline_eval’ function.
+          See the ‘pomp’ C API documentation for details.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._3._1:
+
+        • The ‘bspline.basis’ function now takes the optional argument
+          ‘rg’ which allows one to specify the range over which the
+          basis will be constructed.  By default, this is ‘range(x)’,
+          which agrees with the behavior in earlier versions.
+
+        • Documentation improvements.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._2._2:
+
+        • The archiving functions ‘bake’ and ‘stew’ now use a slightly
+          less exacting comparison of the expression, ‘expr’, they are
+          furnished.  *NB:* Running ‘bake’ or ‘stew’ with archives
+          created by earlier versions may result in recomputation.
+
+        • The ‘time’ method has been extended to ‘pompList’ and related
+          objects.
+
+        • All workhorse functions except ‘partrans’ have new default
+          arguments.
+
+        • Some documentation improvements.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._2._1:
+
+        • The archiving functions ‘bake’ and ‘stew’ now take the
+          argument ‘dir’, which is the directory holding the archive
+          files.  By default, this is the current working directory or
+          the value of the global option ‘pomp.archive.dir’.
+
+        • A new global option, ‘pomp_archive_dir’, can be used to
+          specify the locations of archive files used by ‘bake’ and
+          ‘stew’.
+
+        • Documentation repair of issue flagged by Kurt Hornik (9 June
+          2022).
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._2._0:
+
+        • Minor changes, invisible to the user.
+
+        • Minor changes to the C codes to keep up with R-devel.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._1._0:
+
+        • Minor changes to the C codes to keep up with R-devel.
+
+        • Minor changes in the implementation of ‘bake’ and ‘stew’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._0._1_1:
+
+        • Change in the names of the variables returned by
+          ‘as.data.frame’ applied to a ‘pfilterd.pomp’ object.
+
+        • Fixed bug found by Jesse Wheeler and Ed Ionides, to do with
+          `simulate()` with `include.data=TRUE`.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._0._1_0:
+
+        • It is now possible to plot lists of ‘pomp’ and ‘pomp’-derived
+          objects using a single call to ‘plot’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._0._9:
+
+        • The ‘rbetabinom’ and ‘dbetabinom’ functions, long present as
+          part of the C API, are now available as R functions.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._0._8:
+
+        • The SIR examples ‘sir()’ and ‘sir2()’ now use a negative
+          binomial measurement model.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._0._7:
+
+        • ‘parmat’ can now take a data frame of parameters and convert
+          it into a matrix suitable for furnishing to the ‘params’
+          argument of any ‘pomp’ function.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._0._6:
+
+        • It is now possible to change the parameters in an ‘objfun’
+          (objective function) object using ‘coef(object)<-value’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._0._5:
+
+        • ‘parmat’ now takes an optional argument, ‘names’, which
+          allows the user to name the parameter sets.
+
+        • Independent realizations of the stochastic processes modeled
+          in ‘pomp’ are now distinguished by different values of ‘.id’.
+          This behavior is now uniform throughout.
+
+        • ‘bake’ and ‘stew’ now send messages instead of warnings when
+          they recompute an archive due to a change in code or
+          dependencies.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._0._4:
+
+        • The ensemble adjusted Kalman filter (‘eakf’) has been
+          refactored.  It now makes use of the ‘emeasure’ and
+          ‘vmeasure’ basic components to compute an approximation of
+          the linear relationship between the latent state and the
+          observed variables.
+
+        • The ‘forecast’ method now works for ‘pfiterd_pomp’ objects
+          (i.e., results of ‘pfilter’, ‘pmcmc’, or ‘mif2’
+          computations).
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._0._3:
+
+        • Two new basic model components have been introduced.  These
+          are:
+
+          emeasure, which computes the expectation of the observable
+              variables conditional on the latent state;
+
+          vmeasure, which computes the covariance matrix of the
+              observables given the latent state.
+
+          These are used by the newly refactored ensemble Kalman
+          filter, ‘enkf’.
+
+        • The basic (linear, Gaussian) Kalman filter is now available
+          as ‘kalmanFilter’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._0._2:
+
+        • Computation of Monte Carlo-adjusted profile likelihood is now
+          facilitated by the new ‘mcap’ function.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._0._1:
+
+        • The default return-value format for ‘trajectory’ now matches
+          that of ‘simulate’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _4._0._0:
+
+     Version 4 contains a few changes that are not backward compatible.
+     These are all to do with the elementary function ‘trajectory’,
+     which computes trajectories of the deterministic dynamical
+     skeleton.  See below for details.
+
+        • The behavior of ‘trajectory’ now fully conforms to the
+          behavior of other ‘pomp’ elementary functions.  In
+          particular, one can now add, remove, or modify basic model
+          components in a call to ‘trajectory’ just as one can with
+          ‘simulate’, ‘pfilter’, ‘probe’, etc.  Before version 4,
+          additional arguments to ‘trajectory’ (i.e., those passed via
+          ‘...’) were passed on to the ODE integrator in the case of
+          continuous-time deterministic skeletons (i.e., vectorfields)
+          and ignored in the case of discrete-time skeletons (i.e.,
+          maps).  As of version 4, in order to adjust ODE integrator
+          settings it is necessary to use the ‘ode_control’ argument of
+          ‘trajectory’.  This behavior matches that of ‘traj_objfun’.
+
+        • It is now possible to create a ‘pomp’ object from scratch
+          using ‘trajectory’, together with a specification of the
+          rinit and skeleton components.  Prior to version 4, in order
+          to do so, it was necessary to first create a dummy data set,
+          then call ‘pomp’, and then pass the resulting ‘pomp’ object
+          to ‘trajectory’.  This can now be achieved in one call.
+
+        • The user now has the option, in a call to ‘trajectory’, to
+          have the results returned as one or ‘pomp’ objects.  In this
+          regard, its behavior matches that of ‘simulate’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._5._6:
+
+        • The ‘states’ and ‘obs’ methods now work for lists of ‘pomp’
+          objects (‘listies’).
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._5._5:
+
+        • The workhorse function ‘flow’ now has default arguments.
+
+        • The stateful objective function created by ‘traj_objfun’ has
+          been refactored so that it is independent of ‘trajectory’.
+          This change is invisible to the user, but lays the groundwork
+          for future changes in ‘trajectory’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._5._4:
+
+        • Stateful objective functions created by ‘traj_objfun’,
+          ‘nlf_objfun’, ‘probe_objfun’, and ‘spect_objfun’ now have
+          default arguments.  In particular, the default is argument is
+          a zero-length numeric vector.  Calling such a function with
+          no arguments is valid if and only if the objective function
+          was created with no variables to estimate (empty ‘est’).
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._5._3:
+
+        • Fixed bug in ‘rprior’ arising with integer-valued return
+          vectors.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._5._2:
+
+        • Major improvements to the package manual, including richer
+          cross-linking and better organization.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._5._1:
+
+        • When ‘simulate’ is called with ‘format="data.frame"’ and
+          ‘include.data=TRUE’, the interpolated covariates are now
+          included in the data frame that is returned.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._4._6:
+
+        • ‘bake’ takes a new option, ‘timing’, that controls whether
+          information on the timing is returned or merely stored.  By
+          default, this is set to ‘TRUE’, though this default behavior
+          may change in future.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._4._5:
+
+        • When they encounter an archive produced by an older version,
+          ‘bake’ and ‘stew’ now update the archive in the new format.
+          Recomputation should never be triggered in this case: If
+          recomputation is desired, delete the archive file.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._4._4:
+
+        • ‘bake’ and ‘stew’ now archive a digest of the code in ‘expr’
+          and on subsequent calls check to see if the archived version
+          matches the current version.  Thus, changes to the code
+          automatically trigger recomputation.
+
+        • ‘bake’ and ‘stew’ take the new argument ‘dependson’.  Using
+          this argument, the user can specify objects upon which the
+          computation depends.  These should be passed as unquoted
+          variables; if there are multiple dependencies, they can be
+          passed using ‘c’ or ‘list’.  Digests of these objects will be
+          archived and checked against current values on subsequent
+          calls.  Thus, changing any dependency will automatically
+          trigger recomputation.
+
+        • ‘bake’ now archives the information pertinent to the ‘bake’
+          call; this information is no longer returned along with the
+          result of the computation (unless ‘info=TRUE’).  Similarly,
+          ‘stew’ stores a list, “.ingredients”, in the file it creates.
+          In the ‘stew’ case, unlike all the other objects that are
+          created by ‘expr’, this list is _not_ by default loaded into
+          the calling environment (e.g., the user's workspace).  It
+          will be loaded if the ‘info’ flag is set to ‘TRUE’.
+
+        • ‘freeze’ no longer stores the details of the RNG seed and
+          kind as an attribute of the returned object.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._4._2:
+
+        • Fix bug in ‘bsmc2’ arising when some particles have zero
+          likelihood.  This is Issue #152.  Thanks to Hola-Kwame
+          Adrakey for reporting it.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._4._1:
+
+        • It is now possible to call ‘partrans’ directly on an
+          objective function, such as those created by ‘traj_objfun’,
+          ‘nlf_objfun’, ‘probe_objfun’, or ‘spect_objfun’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._3._1:
+
+        • The package manual and help pages has been streamlined.
+
+        • The ‘mif2’ diagnostic plots have been made more flexible.
+
+        • Some deprecated functions have been removed.  These include
+          ‘cond.loglik’, ‘sliceDesign’, ‘runifDesign’, ‘sobolDesign’,
+          and ‘profileDesign’, which have been replaced by
+          ‘code.logLik’, ‘slice_design’, ‘runif_design’,
+          ‘sobol_design’, and ‘profile_design’, respectively.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._3._0:
+
+        • A bug in ‘rgammawn’ has been fixed.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._2._0:
+
+        • The ‘pomp’ C API has been expanded a bit, to facilitate other
+          packages' linking to the ‘pomp’ library.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._1._1:
+
+        • The help pages have been improved, with an description of the
+          overall package structure and pages on basic model
+          components, elementary algorithms, and estimation algorithms.
+
+        • A note to Windows users on avoiding certain C snippet
+          compilation errors has been added to the help pages.
+
+        • The behavior of ‘profile_design’ has changed.  Previously,
+          the same random (or sub-random) sequence was used for all
+          non-profile parameters.  Now, for each profile slice, a
+          distinct set of points is generated.
+
+        • ‘profileDesign’, ‘sliceDesign’, ‘runifDesign’, and
+          ‘sobolDesign’ have been deprecated and will be removed in a
+          future release.  They are replaced by ‘profile_design’,
+          ‘slice_design’, ‘runif_design’, and ‘sobol_design’,
+          respectively.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._0._3:
+
+        • A new ‘saved.states’ method allows one to extract the saved
+          states from a particle filter computation.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._0._2:
+
+        • All instances of ‘cond.loglik’ have been changed to
+          ‘cond.logLik’, to remove a common source of typographical
+          error.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._0._1:
+
+        • A new sequential importance sampling algorithm has been
+          implemented as ‘wpfilter’.  This is a generalization of the
+          algorithm in ‘pfilter’ in that it tracks the weights of the
+          particles and allows the user to customize the resampling
+          scheme.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _3._0._0:
+
+        • In ‘mif2’, the specification of particle numbers, ‘Np’, has
+          changed.  When ‘Np’ is supplied as a function, ‘Np(0)’ is the
+          requested number of particles at the beginning of the time
+          series.  The previous behavior was that ‘Np(1)’ specified the
+          requested number of particles.  This behavior now matches
+          that of the other particle filtering algorithms, ‘pfilter’,
+          ‘bsmc2’, and ‘pmcmc’.
+
+        • ‘bsmc2’ can now accept a variable number of particles, as do
+          the other particle-filter based algorithms ‘pfilter’,
+          ‘pmcmc’, and ‘mif2’.
+
+        • The internal ‘systematic_resample’ function now allows the
+          user to specify the number of samples desired.  Previously,
+          these were always equal to the number of weights supplied.
+
+        • As promised from version 2.4.1, the ‘tol’ and ‘max.fail’
+          arguments have been removed completely from all
+          particle-filtering algorithms, including ‘pfilter’, ‘pmcmc’,
+          ‘bsmc2’, and ‘mif2’.  See the ‘pomp’ news blog
+          (<https://kingaa.github.io/pomp/blog.html>) for more
+          information.
+
+        • The long-deprecated functions ‘onestep.dens’, ‘onestep.sim’,
+          ‘discrete.time.sim’, ‘euler.sim’, ‘gillespie.sim’,
+          ‘gillespie.hl.sim’, ‘conv.rec’, and ‘values’ have been
+          removed.  These have been replaced as follows
+
+            ‘onestep.dens’       direct specification of ‘dprocess’ component 
+            ‘onestep.sim’        ‘onestep’                                    
+            ‘discrete.time.sim’  ‘discrete_time’                              
+            ‘euler.sim’          ‘euler’                                      
+            ‘gillespie.sim’      ‘gillespie’                                  
+            ‘gillespie.hl.sim’   ‘gillespie_hl’                               
+            ‘conv.rec’           ‘traces’                                     
+            ‘values’             ‘as.data.frame’ or ‘as(x,"data.frame")’      
+           
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._8._0:
+
+        • Trap error from non-finite likelihoods in ‘pmcmc’.
+
+        • New test of ‘pmcmc’ codes in ‘tests/issue109.R’.
+
+        • Trap error from missing accumulator variables in
+          ‘trajectory’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._7._2:
+
+        • The Euler step size in ‘sir’ is now adjustable.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._7._1:
+
+        • As promised, the default value of ‘tol’ in the
+          particle-filtering algorithms ‘pfilter’, ‘pmcmc’, ‘mif2’, and
+          ‘bsmc2’ has been changed to zero.  A warning continues to be
+          issued if ‘tol’ is set to anything other than 0.  In a future
+          release, the option to choose a nonzero tolerance will be
+          removed entirely.
+
+        • In traces and diagnostic plotting methods, the ‘nfail’
+          variable (tracking numbers of filtering failures) has been
+          dropped.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._6._0:
+
+        • Another documentation bug was fixed.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._5._0:
+
+        • A documentation bug, identified by K. Hornik, was fixed.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._4._1:
+
+        • In anticipation of forthcoming algorithmic changes, the ‘tol’
+          and ‘max.fail’ arguments of ‘pfilter’, ‘bsmc2’, ‘pmcmc’, and
+          ‘mif2’ are now deprecated.  A warning is issued if ‘tol’ is
+          set to anything other than 0.  In a future release, these
+          options will be removed entirely: the behavior will be
+          similar to that obtained in the present release by setting
+          ‘tol=0’.
+
+        • A new example illustrating the ‘accumvars’ argument has been
+          provided.
+
+        • Internal computations now use increased precision for means,
+          variances, and certain calculations with likelihoods.
+
+        • A new help page, ‘pomp_examples’, lists the various example
+          datasets and pomp objects provided with the package.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._3._0:
+
+        • The source codes underlying specification of basic model
+          components via R functions has been reworked to remove
+          reliance on deep ‘PROTECT’ stacks.  Thanks to Thomas Kalibera
+          for showing the way!
+
+        • A bug in the documentation for ‘filter.traj’, pointed out by
+          Pierre Jacob, has been fixed.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._2._2:
+
+        • The C API for ‘pomp’ is no longer explained only in comments
+          in the “pomp.h” header file.  It is now described and
+          explained in the new C API vignette.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._2._1:
+
+        • The new ‘pomp_cdir’ global option allows one to set the
+          directory holding C snippet files globally.
+
+        • A bug caused by re-use of the ‘cfile’ argument has been
+          fixed.  Re-use now triggers an error, with an informative
+          message.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._2._0:
+
+        • Some documentation improvements.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._1._2:
+
+        • A bug in ‘runifDesign’ (and therefore ‘profileDesign’ when
+          ‘type="runif"’) has been fixed.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._1._1:
+
+        • There are now ‘plot’ methods for objects of classes
+          ‘probe_match_objfun’ and ‘spect_match_objfun’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._1._0:
+
+        • Released to CRAN.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._1_4:
+
+        • The ‘melt’ function can now be applied to arbitrary ‘pomp’
+          objects.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._1_3:
+
+        • A new function, ‘runifDesign’ allows construction of design
+          matrices using samples from multivariate uniform
+          distributions.
+
+        • The ‘profileDesign’ function takes a new argument, ‘type’,
+          with two options: ‘"sobol"’, the default, constructs the
+          design using ‘sobolDesign’, as before.  ‘"runif"’ uses the
+          new ‘runifDesign’ function.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._1_2:
+
+        • A new example, comprising models and data for the 2014--2016
+          west African Ebola virus disease outbreak, is included.  See
+          ‘?ebola’ for details.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._1_1:
+
+        • It is now possible to adjust the observation times and
+          zero-time in the ‘sir’ and ‘sir2’ examples.  One can also
+          change the default RNG seed used in generating the simulated
+          data.
+
+        • The codes underlying the ‘rprocess’ workhorse have been
+          streamlined to obviate an unnecessary copy operation.  As a
+          result, the interface to the ‘rprocess’ workhorse has been
+          changed.
+
+        • The interface to the new ‘flow’ workhorse has been changed to
+          match.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._1_0:
+
+        • The new ‘flow’ workhorse allows integration/iteration of the
+          deterministic skeleton at arbitrary times from an arbitrary
+          initial condition.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._9:
+
+        • When ‘coef’ is applied to a ‘listie’, the result can be more
+          usefully ‘melt’ed.
+
+        • The probe-names returned by ‘probe.acf’ and ‘probe.ccf’ have
+          changed.
+
+        • A bug, whereby the ‘coef’ method from other packages was
+          masked, has been fixed.
+
+        • Errors in the documentation have been corrected.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._8:
+
+        • There is a new ‘as.data.frame’ method for ‘listie’s.
+
+        • Some problems with the exposure of internal objects for
+          package developers have been corrected.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._7:
+
+        • The ‘magrittr’ pipe operator, ‘%>%’, is now re-exported.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._6:
+
+        • More examples have been included.
+
+        • Minor changes to error messages.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._5:
+
+        • The names of the ‘objfun’ methods have been changed to
+          ‘probe_objfun’, ‘spect_objfun’, ‘traj_objfun’, and
+          ‘nlf_objfun’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._4:
+
+        • The package directory structure has been modified to include
+          a new ‘examples’ directory, which holds the examples used in
+          the documentation.
+
+        • The names of the ‘objfun’ methods have been shortened.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._3:
+
+        • It is now permissible that the sequence of observation times
+          (and sequences of covariate times) be merely non-decreasing
+          sequences.  Previously, ‘pomp’ insisted on strictly
+          increasing time sequences.
+
+        • The default cooling schedule (‘cooling.type’) in ‘mif2’ is
+          now “geometric”, in contrast to “hyperbolic”, as before.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._2:
+
+        • ‘pomp’ now requires at least R version 3.5.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._1:
+
+        • The ‘zeronames’ argument has been renamed ‘accumvars’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _2._0._0:
+
+        • In the course of ordinary work, one should never need to
+          interact with the low-level ‘pomp’ constructor function now.
+
+        • The ‘pompExample’ function has been dropped.  The various
+          examples are now included as regular functions that construct
+          ‘pomp’ objects.
+
+        • The ‘bbs’ example has been dropped.
+
+        • One can now modify basic model components at (almost) any
+          stage in a pipeline of ‘pomp’ computations.  All the
+          top-level inference functions, plus ‘probe’, ‘pfilter’, and
+          ‘simulate’ now allow modification of basic model components.
+
+        • The ‘rprocess’ plugins ‘onestep.sim’, ‘discrete.time.sim’,
+          ‘euler.sim’, ‘gillespie.sim’, and ‘gillespie.hl.sim’ have
+          been renamed ‘onestep’, ‘discrete_time’, ‘euler’,
+          ‘gillespie’, and ‘gillespie_hl’, respectively.  The old usage
+          is available but deprecated.
+
+        • One can now call ‘simulate’ on a model without reference to
+          any data.
+
+        • The covariate table facility (‘covariate_table’) now supports
+          piecewise constant interpolation.
+
+        • The syntax with which one includes covariates via
+          ‘covariate_table’ has become more flexible.  Specifically,
+          the arguments to ‘covariate_table’ are now evaluated
+          sequentially, so that later ones can depend on earlier ones.
+          Once evaluated, the covariates are bound column-wise into a
+          single data frame.
+
+        • The manner in which one writes R functions to specify basic
+          model components has been totally changed.  Before, one wrote
+          functions that took specific arguments such as 'x', 'params',
+          and 'covars'.  Now, one writes such functions with any or all
+          state variables, observables, covariates, and/or time as
+          arguments.
+
+        • ‘simulate’ now returns more informative results when
+          simulations from multiple parameter sets are simultaneously
+          computed.  Specifically, if ‘params’ has column names, these
+          are used to identify the resulting simulations.  Thus when
+          ‘format = "pomps"’ (the default), the names of the resulting
+          list will be constructed from the column names of ‘params’.
+          Likewise, when ‘format = "arrays"’, the resulting arrays will
+          have informative column names; When ‘format = "data.frame"’,
+          the identifier variable will make use of the column names.
+
+        • The basic particle filter, ‘pfilter’, has a simpler mode of
+          operation: ‘params’ should be a single parameter set only.
+          That is, it is no longer possible to pass a matrix of
+          parameters to ‘pfilter’.
+
+        • The Liu-West algorithm, ‘bsmc2’, has a simpler mode of
+          operation: ‘params’ should be a single parameter set only:
+          the SMC particles are drawn from ‘rprior’.
+
+        • The ‘as.data.frame’, ‘states’, and ‘obs’ options for
+          ‘simulate’ have been done away with.  One now chooses the
+          format of the returned simulations via the ‘format’ argument.
+          When one simulates at multiple parameter sets, list names,
+          array ‘dimnames’, or identifying variables in the output data
+          frame help to correlate simulations with parameter sets.
+
+        • The ‘as.data.frame’ argument to ‘trajectory’ has been removed
+          in favor of a new ‘format’ argument that allows one to choose
+          between receiving the results in the form of an ‘"array"’ or
+          a ‘"data.frame"’.
+
+        • All the basic model components now have defaults.
+
+            • The default ‘rinit’ behavior remains as it was: it
+              assumes the initial state distribution is concentrated at
+              a point mass determined by parameters with “‘.0’” or
+              “‘_0’” suffices.
+
+            • The default process model is “missing”: calls to
+              ‘dprocess’ and ‘rprocess’ will result in missing values
+              (‘NA’).
+
+            • The default measurement model is “missing” as well.
+
+            • The default prior is flat and improper: all calls to the
+              default ‘dprior’ result in ‘1’ (‘0’ if ‘log = TRUE’, and
+              all calls to ‘rprior’ result in ‘NA’.
+
+            • The default skeleton is missing.
+
+            • The default parameter transformations remain the
+              identity.
+
+        • The ‘transform’ argument present in many ‘pomp’ algorithms
+          has been removed.  Parameter transformations are now
+          automatically performed when appropriate.  The default
+          parameter transformation remains the identity.
+
+        • The old ‘probe.match’ and ‘traj.match’ functions have been
+          removed.  The new approach to parameter estimation based on
+          numerical optimization involves constructing stateful
+          objective functions.  There are now three of these:
+          ‘traj.match.objfun’, ‘probe.match.objfun’, and
+          ‘spect.match.objfun’.
+
+        • The documentation system has been thoroughly overhauled.
+
+        • In ‘skeleton’, the ‘t’ argument has been replaced by ‘times’,
+          to make this uniform with the other workhorse functions.
+
+        • Covariates are now included using the ‘covariate_table’
+          construction, passed via the ‘covar’ argument to ‘pomp’.  The
+          ‘tcovar’ argument is no longer used.
+
+        • Instead of providing separate ‘fromEstimationScale’ and
+          ‘toEstimationScale’ arguments to ‘pomp’, one now provides a
+          single ‘partrans’ argument constructed by means of the new
+          function ‘parameter_trans’.  In addition, references to
+          “fromEstimationScale” and “toEstimationScale” have been
+          abbreviated to “fromEst” and “toEst”, respectively,
+          throughout the package.
+
+        • When writing C snippets for parameter transformations, the
+          notation ‘T_p’ refers to the value of ‘p’ on the estimation
+          scale.  Thus, if parameter alpha is to be log-transformed for
+          estimation, the ‘toEst’ snippet would contain the line
+          ‘T_alpha = log(alpha);’ and the ‘fromEst’ snippet would
+          include ‘alpha = exp(T_alpha);’.
+
+        • The ‘parameter_trans’ function now takes optional arguments
+          ‘log’, ‘logit’, and ‘barycentric’, with names of parameters
+          to be log-, logit-, and log-barycentric transformed,
+          respectively.
+
+        • The ‘measurement.model’ argument to ‘pomp’ has been removed.
+          It is now necessary to specify the measurement model directly
+          using ‘rmeasure’ and/or ‘dmeasure’.
+
+        • The ‘initializer’ is no longer referred to by that name.  It
+          is now ‘rinit’, since it draws from the distribution of the
+          latent state at the initial time.  The low-level function
+          ‘init.state’ has been replaced by ‘rinit’.
+
+        • The ‘conv.rec’ method has been deprecated, replaced by the
+          new ‘traces’ method.
+
+        • The ‘euler.sir’ example has been renamed ‘sir’.
+
+        • The ‘gillespie.sir’ example has been renamed ‘sir2’.
+
+        • The ‘covmat’ method can now be applied to a ‘probed.pomp’
+          object.  It returns the estimated covariance matrix of the
+          probes.
+
+        • When ‘trajectory’ calls on ‘deSolve’ routines to numerically
+          integrate a model vectorfield, more informative error
+          messages are generated, and diagnostics are printed when
+          ‘verbose = TRUE’.
+
+        • The ‘show’ method applied to pomp objects is now quite terse.
+          To obtain detailed information, the ‘spy’ method is
+          available.
+
+        • The ‘spy’ method now returns the information formerly
+          displayed in a call to ‘show’, in addition to the C files
+          associated with any C snippets.
+
+        • The use of ‘$’ methods to access the slots of ‘pomp’ S4
+          objects has now been removed.  These classes are no longer
+          exported (for the most part).
+
+        • The ‘transform’ argument to the ‘probe.quantile’ function has
+          been removed (as it is entirely redundant!).
+
+        • The old and deprecated ‘mif’ and ‘bsmc’ methods have been
+          removed.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_8._8:
+
+        • The ‘obs’ and ‘states’ arguments of ‘simulate’ are deprecated
+          and will be removed in a forthcoming release.
+
+        • The C-level interface for ‘apply_probe_sims’ has changed: the
+          new argument ‘rho’ must be the “package:pomp” environment.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_8._7:
+
+        • A bug in ‘pfilter’ (and hence ‘pmcmc’) when
+          ‘filter.traj=TRUE’ was discovered and fixed.  In the buggy
+          version, the filter trajectory was sampled with incorrect
+          weights.
+
+        • Timo Voipio contributed a pull request that traps the error
+          resulting from ‘sannbox’ being passed a ‘candidate.dist’ that
+          is not a function.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_8._6:
+
+        • ‘show’ and ‘print’ methods have been made very terse: they
+          simply report on the class of the object in question.  To see
+          more detailed information about a ‘pomp’ object, use ‘spy’.
+
+        • New (unexported) ‘solibs<-’ method allows developers of
+          packages extending ‘pomp’ to incorporate C snippets into
+          object that contain ‘pomp’ objects.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_8._5:
+
+        • New ‘verbose’ option in ‘trajectory’ gives diagnostic
+          information from ‘deSolve’ integration routines.  Of course,
+          this is pertinent only if the model skeleton is a
+          vectorfield.
+
+        • Bug in the display of ‘istate’ when ‘deSolve::ode’ errors has
+          been fixed.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_8._4:
+
+        • New ‘hitch’ function facilitates construction of ‘pomp.fun’
+          objects from R functions, C snippets, and links to external
+          libraries.
+
+        • Native routines needed to access ‘pomp.fun’ objects in C are
+          now registered for use by other packages.
+
+        • ‘coef(object) <- NULL’, where ‘object’ is of class ‘pomp’,
+          erases any parameters stored in ‘object’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_8._3:
+
+        • The ‘euler.sir’, ‘gillespie.sir’, ‘blowflies’, ‘ricker’,
+          ‘bbs’, ‘dacca’, and ‘rw2’ examples are all now implemented
+          using C snippets.
+
+        • A new ‘pomp_defines.h’ header is provided for developers of
+          packages that depend on ‘pomp’.
+
+        • Internally, ‘rprocess’ is no longer stored as an R function.
+          The use of plugins is now required for the implementation of
+          the ‘rprocess’ component.  Currently, there are five plugins
+          available: ‘onestep.sim’, ‘discrete.time.sim’, ‘euler.sim’,
+          ‘gillespie.sim’, and ‘gillespie.hl.sim’.
+
+        • The new ‘hitch’ function automates the building and linking
+          of C snippets and R functions into ‘pomp.fun’s.
+
+        • The handling of ‘dprocess’ has changed.  The ‘onestep.dens’
+          plugin is now deprecated and will soon be removed.
+          ‘dprocess’ is now specified directly using either a C snippet
+          or an R function, in much the same way that, for example,
+          ‘dmeasure’ is specified.
+
+        • The old ‘forward’ and ‘inverse’ options for the ‘dir’
+          argument of ‘partrans’ have been dispensed with.  The much
+          more descriptive options ‘toEstimationScale’ and
+          ‘fromEstimationScale’ remain.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_8._2:
+
+        • The C snippet compiling facilities have been thoroughly
+          reworked.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_8._1:
+
+        • ‘onestep.dens’ can now take a ‘Csnippet’ specification of the
+          process-model transition density.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_7._4:
+
+        • All inference functions can now take a list in the ‘start’ or
+          ‘params’ arguments.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_7._3:
+
+        • When altering parameters in a call to ‘probe’ on a
+          ‘probed.pomp’ object, the new parameters were ignored.  This
+          bug has been fixed.
+
+        • ‘mif2’, ‘pfilter’, ‘probe’, ‘probe.match’, and
+          ‘probe.match.objfun’ can now gracefully handle a list in the
+          ‘start’ or ‘params’ arguments.
+
+        • New ‘spy’ method displays the C snippet file(s) associated
+          with a ‘pomp’ object.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_7._2:
+
+        • The long-deprecated ‘seed’ argument to ‘bsmc’ and ‘bsmc2’ has
+          been removed.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_7._1:
+
+        • More work to obviate warnings generated by T. Kalibera's
+          latest ‘rchk’ checks.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_6._4:
+
+        • Messages from the compiler resulting from attempts to compile
+          C snippets are now suppressed on all platforms except in case
+          of failure.  Setting ‘verbose=TRUE’ forces display of these
+          messages.
+
+        • Source codes have been revisited to obviate warnings
+          generated by T. Kalibera's latest ‘rchk’ checks.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_6._3:
+
+        • Fix a minor bugs in ‘spect’.
+
+        • Improve test coverage.
+
+        • ‘spect.match’ has been refactored, with small changes to the
+          interface.
+
+        • ‘pomp’ now handles specification of workhorse functions
+          (i.e., ‘rprocess’, ‘dprocess’, ‘rmeasure’, ‘dmeasure’,
+          ‘initializer’, ‘skeleton’, ‘rprior’, ‘dprior’,
+          ‘fromEstimationScale’, ‘toEstimationScale’) as ‘NULL’ more
+          consistently.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_6._2:
+
+        • Fix bug in systematic resampler when ‘np != nw’.
+
+        • Fix bug in ‘conv.rec’ when only one parameter is requested.
+
+        • Correct and improve documentation for ‘conv.rec’.
+
+        • ‘coef<-’ can now take a list of parameters: it simply applies
+          ‘unlist’ to turn the list into a numeric vector.
+
+        • Simplify ‘conv.rec’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_6._1:
+
+        • In ‘pfilter’, ‘Np’ is now a required argument unless ‘params’
+          is specified as a matrix of particles.  Thanks to Carles
+          Breto for catching the unintended behavior.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_5._4:
+
+        • The bug reported in issue #57 has been fixed.
+
+        • A bug arising when building pomp objects with Csnippets in
+          certain Windows configurations has been fixed.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_5._3:
+
+        • Issue #56, in which covariate names are discarded when
+          coercing a pomp object to a data frame, has been fixed.
+          Thanks to Eamon O'Dea for reporting this bug.
+
+        • More informative error messages are given when ‘bake’ or
+          ‘freeze’ return ‘NULL’.  In such a case, these functions now
+          generate a warning and return a character-string message,
+          with attributes.
+
+        • Improve documentation of ‘traj.match’, in response to Issue
+          #57.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_5._2:
+
+        • A new facility, ‘gillespie.hl.sim’, allows implementation of
+          Gillespie's algorithm for exact stochastic simulation of
+          continuous-time Markov processes via a streamlined C snippet
+          interface.
+
+        • The old facility for Gillespie simulations, ‘gillespie.sim’,
+          now accepts C snippets for faster calculation of event rates.
+
+        • The old ‘skeleton.type’ and ‘skelmap.delta.t’ arguments of
+          the ‘pomp’ constructor, which have generated error messages
+          since version 1.9.2, have been done away with completely.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_5._1:
+
+        • Eamon O'Dea identified a bug (Issue #54) occurring when
+          ‘pomp’ is called with a single-row data frame.  This has been
+          fixed using his contributed patch.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_4._2:
+
+        • A new ‘dmultinom’ function is provided in ‘pomp.h’.  This
+          provides the probability distribution function for the
+          multinomial distribution.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_4._1:
+
+        • Improved tests.
+
+        • Fixed bugs emerging in R-devel due to refactoring of
+          underlying R source code.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_3._4:
+
+        • Eamon O'Dea pointed out that the bug in ‘gillespie.sim’,
+          addressed by version 1.12.3, was not completely fixed.  This
+          problem has now been resolved.  In addition, covariates are
+          now guaranteed to be evaluated at least once per observation
+          interval.
+
+        • The new argument ‘hmax’ to ‘gillespie.sim’ allows the user to
+          specify the maximum step size that will be taken before
+          covariates are evaluated.
+
+        • The K-leap method has been removed.  Its accuracy is low on
+          test problems and it is difficult to make it compatible with
+          the pomp paradigm.  In particular, it does not readily
+          accomodate time-varying covariates in a sensible way, nor
+          does it lend itself to simulations at pre-specified times.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_3._3:
+
+        • ‘bspline.basis’ and ‘periodic.bspline.basis’ now take an
+          optional non-negative integer argument ‘deriv’.  When ‘deriv
+          > 0’, the order-‘deriv’ derivative of each basis function is
+          returned.
+
+        • A new function, ‘periodic_bspline_basis_eval_deriv’, has been
+          added to the C API.  This function gives access, at the C
+          level, to evaluation of the derivatives of periodic
+          B-splines.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_3._2:
+
+        • Upgrade license to GPL version 3.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_3._1:
+
+        • Fix buffer-flow problem identified by ‘valgrind’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_2._3:
+
+        • Fix bug found by Eamon O'Dea in ‘gillespie.sim’.
+
+        • Fix bug in ‘onestep.sim’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_2._2:
+
+        • The Ricker example has a new parameter, c, which scales the
+          (unobserved) population size.  By default, c=1, so that the
+          behavior is as before.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_2._1:
+
+        • Improved error trapping.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_1._3:
+
+        • Some changes have been made to the use of random numbers in
+          some codes (the stochastic simulations in ‘gillespie.sim’ and
+          the resampling in the particle-filtering codes).  These
+          changes will mean that calculations performed before will not
+          be reproducible in perfect detail, but will be statistically
+          equivalent.
+
+        • Minor changes in C codes to obviate warnings generated by T.
+          Kalibera's ‘rchk’ checks.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_1._2:
+
+        • The rare and fascinating “Bug of St. Patrick” has been fixed.
+          Thanks to Carles Breto for finding the bug and helping to
+          isolate it.
+
+        • More informative error messages are generated when ‘dmeasure’
+          returns a non-finite likelihood in any of the particle
+          filtering codes.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_1._1:
+
+        • Some streamlining of codes.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_0._6:
+
+        • Callable routines are now registered.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_0._5:
+
+        • More verbosity is provided with ‘verbose=TRUE’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_0._4:
+
+        • The functions ‘bake’, ‘stew’, and ‘freeze’ now preserve
+          information about the system time used in computation as an
+          attribute of the returned object.  In addition, these
+          functions store information about the RNG settings.
+
+        • Some documentation improvements, courtesy of Sebastian Funk.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_0._3:
+
+        • Documentation improvements.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_0._2:
+
+        • More verbosity in building of Csnippets.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1_0._1:
+
+        • Better handling of ‘pomp’'s ‘times’ argument.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._9._3:
+
+        • New ‘logLik’ method for ‘pmcmcList’ objects.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._9._2:
+
+        • The deprecated options to supply a matrix or numeric vector
+          as the ‘data’ argument to ‘pomp’ have been removed and doing
+          so now generates an error.  The first argument to ‘pomp’,
+          ‘data’, must now be provided either as a data frame or as an
+          object of class ‘pomp’.  See ‘?pomp’ for details.
+
+        • The deprecated ‘skeleton.type’ and ‘skelmap.delta.t’
+          arguments to ‘pomp’ have been removed.  Using these arguments
+          will now generate an error message.  The correct method of
+          specifying the deterministic skeleton is now explained in the
+          help pages (‘?pomp’).
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._9._1:
+
+        • Source code fixes to eliminate warnings during compilation.
+
+        • Improved test suite.
+
+        • Minor documentation correction.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._8._1_1:
+
+        • During particle filtering, when non-finite ‘dmeasure’ values
+          are generated, an error is generated and the offending
+          parameters, states, data, and time are reported.  In methods
+          that use parameter transformations (‘transform=TRUE’), the
+          reported parameters were on the transformed (estimation)
+          scale, which can be confusing.  The error message now gives
+          the parameters on the natural (model) scale.
+
+        • Modified ‘src/ssa.c’ to fix UBSAN errors.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._8._1_0:
+
+        • C codes have been modified to take advantage of changes to
+          the R API (R SVN REVISION 71180).
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._8._9:
+
+        • A bug in ‘mif2’ arising when filtering fails in the final
+          timestep has been fixed.  In this case, when all particles
+          are deemed inconsistent with the data, we use an unweighted
+          mean (with a warning) in place of the default weighted mean.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._7._7:
+
+        • The stochastic simulation algorithms underlying the Gillespie
+          and K-leap methods (‘gillespie.sim’, ‘kleap.sim’) have been
+          refactored in C.  In addition, errors due to accumulation of
+          round-off error have been repaired.  The result will be more
+          accurate, but somewhat slower when there are a very large
+          number of reactions.
+
+        • Further improvements to the test suite.  Code coverage is now
+          100%.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._7._6:
+
+        • In Sobol' sequence generation (‘sobolDesign’,
+          ‘profileDesign’), we now use the suggestion of Joe & Kuo
+          (2003) to choose a better sequence start point.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._7._5:
+
+        • The generation of Sobol' sequences (‘sobolDesign’,
+          ‘profileDesign’) is now performed using the ‘NLopt’ routines
+          written in C instead of the original TOMS 659 FORTRAN codes.
+          The copyright notices are located in the source code.
+
+        • Improved testing suite.
+
+        • Made ‘rw.sd’ even more robust via new ‘safecall’ class.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._7._4:
+
+        • Refactored ‘rw.sd’ for greater stability.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._7._3:
+
+        • Fixed a bug in ‘plot’ on ‘pomp’ objects with more than 10
+          variables to plot.
+
+        • Added the ‘shlib.args’ option to ‘pomp’, allowing arbitrary
+          options to be passed to the compiler when C snippets are
+          used.
+
+        • Modified the “dacca” example to use C snippets.
+
+        • Refactored ‘rw.sd’ for greater stability.
+
+        • Made Sobol' codes more robust.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._7._2:
+
+        • Modified the demos to use best practices.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._7._1:
+
+        • Improved the test suite.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._6._7:
+
+        • Improve the test suite and error messages.
+
+        • Replace the automatic “verbose” setting during compilation
+          under Windows.  This was dropped in version 1.6.4.3, when it
+          no longer appeared to be necessary.  Apparently, it is, at
+          least under some Windows OS/R combinations.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._6._6:
+
+        • Fix ‘probe’ bug introduced in version 1.6.5.9.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._6._5:
+
+        • Several obscure bug-fixes.
+
+        • Improvement of the test suite and of error messages.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._6._4:
+
+        • Remove the automatic “verbose” setting during compilation
+          under Windows.  This was introduced in version 0.63-6 as a
+          workaround.  It appears no longer to be necessary.
+
+        • Improve the ‘show’ method for ‘pomp’ objects.
+
+        • Change the ‘print’ method for ‘pomp’ objects.
+
+        • Improve messages for plugin errors.
+
+        • Some internal refactoring.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._6._3:
+
+        • Improve error messages for missing basic components.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._6._2:
+
+        • Fix typos in one of the help-page examples.
+
+        • Add some references.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._6._1:
+
+        • Major revisions to the package help pages and manual.  The
+          separate documentation on C snippets and process-model
+          plugins has been merged into the main ‘pomp’ help page, which
+          now has comprehensive instructions on building a ‘pomp’
+          object.
+
+        • Update to the package help page.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._5._1_0:
+
+        • The matrix and numeric vector options for the ‘data’ argument
+          to ‘pomp’ are now deprecated and will be removed in a future
+          release.  In calls to ‘pomp’, ‘data’ should be either a data
+          frame or a ‘pomp’-class object.
+
+        • Many more errors are now trapped and reported with more
+          informative messages.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._5._9:
+
+        • Redundant ‘bootstrap’ argument to ‘nlf’ has been removed.
+
+        • More improvements to the testing suite.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._5._8:
+
+        • Major improvements to error and warning handling.
+
+        • Fix bugs that might arise in rare circumstances in ‘simulate’
+          and ‘eulermultinom’ functions.
+
+        • More improvements to the testing suite.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._5._7:
+
+        • Many improvements to the test suite.
+
+        • Fixed a bug in ‘pompExample’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._5._6:
+
+        • Major overhaul of error handling system and error messages.
+
+        • There is a new plugin for ‘rprocess’ called ‘kleap.sim’.
+          This implements the so-called “K-leap method” of Cai & Xu
+          (2007).
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._5._5:
+
+        • Many improvements to the test suite.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._5._4:
+
+        • More improvements to the test suite.
+
+        • Fixed bugs found as a result of improved testing.
+
+        • In ‘mif2’, it is now required that ‘Nmif>0’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._5._3:
+
+        • More improvements to the test suite.
+
+        • Fixed bugs found as a result of improved testing.
+
+        • Fixed bug in specification of skeleton in pompExamples.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._5._2:
+
+        • Improved the test suite to obtain better code coverage.
+
+        • ‘pomp’ is no longer an S4 method.  Its new status as an
+          ordinary function abbreviates and consolidates the code and
+          simplifies the documentation.
+
+        • Some minor improvements to error messages.
+
+        • A bug restricting access in C code to ‘userdata’ has been
+          fixed.
+
+        • Fixed bug in ‘pompExample(...,show=TRUE)’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._5._1:
+
+        • New methods for the Ensemble Kalman Filter (‘enkf’) and
+          Ensemble Adjustment Kalman Filter (‘eakf’) have been added to
+          the package.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._4._9:
+
+        • A better interface for specifying a model's deterministic
+          skeleton is provided.  One specifies
+          ‘skeleton=map(f,delta.t)’ for a discrete-time skeleton (a
+          map) and ‘skeleton=vectorfield(f)’ for a continuous-time
+          skeleton (a vectorfield).  The old arguments ‘skeleton.type’
+          and ‘skelmap.delta.t’ are deprecated and will be removed in a
+          future release.
+
+        • The ‘pfilter’ help page has been improved.  Specifically, the
+          discussion of filtering failures is better.
+
+        • Miscellaneous improvements to the help pages.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._4._8:
+
+        • ‘mif2’ no longer computes filter means.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._4._7:
+
+        • The new argument ‘show’ of ‘pompExamples’ allows one to
+          display the example code instead of executing it.
+
+        • The minimum version of R supported is now 3.1.2.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._4._6:
+
+        • ‘init.state’ now has the optional argument ‘nsim’.  Using
+          this, one can request multiple initial state vectors per
+          parameter vector.
+
+        • ‘pfilter’ now uses less memory when it is asked to run at a
+          single point in parameter space.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._4._5:
+
+        • A bug associated with the ‘rw.sd’ argument to ‘mif2’ on
+          Windows platforms has been fixed.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._4._4:
+
+        • The ‘method="mif2"’ option to ‘mif’ has been removed.  Use
+          ‘mif2’ instead.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._4._3:
+
+        • The ‘particles’ method (rarely if ever used), has been
+          removed to streamline the ‘mif’ codes.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._4._2:
+
+        • The ‘method="mif2"’ option to ‘mif’ is now deprecated.  It
+          will be removed in a future release.  Use ‘mif2’ instead.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._4._1:
+
+        • Following the publication of the Journal of Statistical
+          Software announcement paper, the ‘CITATION’ has been modified
+          to include the appropriate citation.  Please use
+          ‘citation("pomp")’ to learn about how to cite ‘pomp’
+          correctly.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._3._4:
+
+        • ‘conv.rec’ on the results of a ‘mif2’ computation now play
+          nicely with ‘reshape2::melt’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._3._3:
+
+        • It is now possible to direct ‘pomp’ to place ‘Csnippet’ codes
+          in a specified location.  This is accomplished via the new
+          ‘cdir’ and ‘cfile’ arguments to ‘pomp’.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._3._2:
+
+        • When several concurrent R processes attempt to simultaneously
+          compile ‘Csnipet’ code from copies of a ‘pomp’ object on the
+          same machine, a race condition exists.  This release fixes
+          this by ensuring that ‘Csnippet’ codes are written and
+          compiled in a process-specific directory.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._3._1:
+
+     This release removes several long-deprecated features.
+
+        • The ‘seed’ argument to ‘pfilter’ has been removed.  Use
+          ‘freeze’ to obtain similar functionality.
+
+        • The redundant ‘pars’ argument to ‘mif’ has been removed.
+          Names of parameters to be estimated are taken from the
+          nonzero entries of ‘rw.sd’.  Initial-value parameters are
+          designated using the ‘ivps’ argument.
+
+        • The old ‘parameter.transform’ and ‘parameter.inv.transform’
+          arguments to ‘pomp’ have been removed.  They were superseded
+          by the arguments ‘fromEstimationScale’ and
+          ‘toEstimationScale’ in version 0.65-1.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._2._2:
+
+        • Some internal changes to ‘mif2’ by C. Breto, in support of
+          panel methods under development.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._2._1:
+
+        • Bug fix: for POMPs with a scalar state variable, the
+          ‘filter.mean’, ‘pred.mean’, and ‘pred.var’ methods dropped
+          the singleton dimension of the respective arrays, in conflict
+          with the assumptions of certain ‘plot’ methods.  This
+          resolves issue #3.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1._4:
+
+        • Documentation improvements.  Specifically, the details of how
+          step-sizes are chosen in the ‘euler.sim’,
+          ‘discrete.time.sim’, and ‘onestep.sim’ plugins has been
+          spelled out explicitly.  Also, incompleteness in the
+          ‘sannbox’ documentation has been corrected.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1._3:
+
+        • Provide ‘filter.traj’ method for ‘pmcmcList’ objects.
+
+_C_h_a_n_g_e_s _i_n '_p_o_m_p' _v_e_r_s_i_o_n _1._1._2:
+
+        • Fixed a bug in ‘mif’ and ‘mif2’ when
+          ‘cooling.type="hyperbolic"’ and ‘cooling.fraction.50=1’.
+
